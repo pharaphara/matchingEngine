@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>LoggingAspect.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">matchingEngine</a> &gt; <a href="index.source.html" class="el_package">fr.eql.matchingEngine.aspect</a> &gt; <span class="el_source">LoggingAspect.java</span></div><h1>LoggingAspect.java</h1><pre class="source lang-java linenums">package fr.eql.matchingEngine.aspect;
+
+
+
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import fr.eql.matchingEngine.utils.Util;
+
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
+import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.util.Objects;
+
+import static java.lang.System.currentTimeMillis;
+import static org.apache.logging.log4j.util.Strings.isNotBlank;
+
+/**
+ * Aspect for logging execution.
+ *
+ * @author SBM
+ *
+ */
+@Aspect
+@Component
+@ConfigurationProperties(&quot;interceptor&quot;)
+<span class="nc" id="L41">public class LoggingAspect {</span>
+
+    @Value(&quot;${project.name}&quot;)
+    String projectName;
+
+    @Value(&quot;${logging.prefix}&quot;)
+    String prefixLog;
+
+    @Value(&quot;${logging.numberInfoChar}&quot;)
+    int numberInfoChar;
+
+    @Value(&quot;${logging.numberDebugChar}&quot;)
+    int numberDebugChar;
+
+    //TODO ADD PACKAGE BEFORE TARGET METHODE
+
+    public static final String API_Repository = &quot;execution(* fr.eql.matchingEngine.controller.*.*(..))&quot;;
+    public static final String Service_Repository = &quot;execution(* fr.eql.matchingEngine.services.servicesinterface.*.*(..))&quot;;
+    public static final String End_Point_Repository = &quot;execution(* fr.eql.matchingEngine.endpointservices.servicesinterface.*.*(..))&quot;;
+    public static final String Exception_Repository = &quot;execution(* fr.eql.matchingEngine.exception.*.*(..))&quot;;
+
+
+    @Pointcut(API_Repository)
+<span class="nc" id="L64">    public void anyServiceController() {}</span>
+
+    @Pointcut(Service_Repository)
+<span class="nc" id="L67">    public void anyServiceMethod() {}</span>
+
+    @Pointcut(End_Point_Repository)
+<span class="nc" id="L70">    public void anyEndPointCall() {}</span>
+
+    @Pointcut(Exception_Repository)
+<span class="nc" id="L73">    public void anyException() {}</span>
+
+    @Around(&quot;anyServiceController()&quot;)
+    public Object logAroundAllController(ProceedingJoinPoint joinPoint) throws Throwable {
+
+<span class="nc" id="L78">        Logger LOGGER = LoggerFactory.getLogger(joinPoint.getTarget().getClass());</span>
+
+<span class="nc" id="L80">        long start = currentTimeMillis();</span>
+<span class="nc" id="L81">        long duration = 0;</span>
+<span class="nc" id="L82">        String paramsOutput = null;</span>
+<span class="nc" id="L83">        String statutResponse = &quot;[KO]&quot;;</span>
+<span class="nc" id="L84">        Object result = null;</span>
+<span class="nc" id="L85">        String geobusInstanceId = null;</span>
+
+<span class="nc" id="L87">        Object parameterObject = getParameter(joinPoint, &quot;geobusInstanceId&quot;);</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">        if ( Objects.nonNull(parameterObject) ) {</span>
+<span class="nc" id="L89">            geobusInstanceId = String.valueOf(parameterObject);</span>
+        }
+
+<span class="nc bnc" id="L92" title="All 2 branches missed.">        MDC.put(&quot;instanceId&quot;, isNotBlank(geobusInstanceId) ? geobusInstanceId : Util.generateUUid(projectName));</span>
+
+        //MDC.put(&quot;CUSTOM_METHOD_NAME_KEY&quot;, joinPoint.getSignature().getName());
+
+        try {
+<span class="nc" id="L97">            MDC.put(&quot;actualMethodName&quot;, joinPoint.getSignature().getName() + &quot; -&gt; Aspect methode : &quot; ) ;</span>
+
+<span class="nc" id="L99">            String paramsInput = &quot;[&quot;;</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">            if(joinPoint.getArgs()!=null) {</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">                for (Object oneArg : joinPoint.getArgs()){</span>
+<span class="nc bnc" id="L102" title="All 4 branches missed.">                    if(oneArg != null &amp;&amp; !oneArg.getClass().getName().contains(&quot;HttpServlet&quot;)){</span>
+<span class="nc" id="L103">                        Gson gson = new GsonBuilder().disableHtmlEscaping().create();</span>
+<span class="nc" id="L104">                        paramsInput += gson.toJson(oneArg) + &quot;,&quot;;</span>
+<span class="nc bnc" id="L105" title="All 4 branches missed.">                    }else if(oneArg != null &amp;&amp; oneArg.getClass().getName().contains(&quot;HttpServlet&quot;)){</span>
+<span class="nc" id="L106">                        paramsInput += String.valueOf(requestToJson((HttpServletRequest)oneArg)) + &quot;,&quot;;</span>
+                    }
+                }
+            }
+<span class="nc" id="L110">            paramsInput = paramsInput + &quot;]&quot;;</span>
+
+<span class="nc bnc" id="L112" title="All 4 branches missed.">            LOGGER.info(prefixLog + &quot; API START - &quot; + joinPoint.getSignature().getName() + &quot; - Data input : &quot; +  (isNotBlank(paramsInput) ? paramsInput.substring(0, (paramsInput.length() &gt; numberInfoChar ? numberInfoChar : paramsInput.length())) : &quot;&quot;));</span>
+<span class="nc bnc" id="L113" title="All 4 branches missed.">            LOGGER.debug(prefixLog + &quot; API RECEIVE - &quot; + (isNotBlank(paramsInput) ? paramsInput.substring(0, (paramsInput.length() &gt; numberDebugChar ? numberDebugChar : paramsInput.length())) : &quot;&quot;));</span>
+
+<span class="nc" id="L115">            MDC.remove(&quot;actualMethodName&quot;);</span>
+
+<span class="nc" id="L117">            result = joinPoint.proceed();</span>
+<span class="nc" id="L118">            statutResponse = &quot;[OK]&quot;;</span>
+
+<span class="nc" id="L120">            paramsOutput = &quot;&quot;;</span>
+<span class="nc bnc" id="L121" title="All 4 branches missed.">            if(result != null &amp;&amp; !result.getClass().getName().contains(&quot;HttpServlet&quot;)){</span>
+<span class="nc" id="L122">                Gson gson = new GsonBuilder().disableHtmlEscaping().create();</span>
+<span class="nc" id="L123">                paramsOutput = gson.toJson(result);</span>
+<span class="nc bnc" id="L124" title="All 4 branches missed.">            }else if(result != null &amp;&amp; result.getClass().getName().contains(&quot;HttpServlet&quot;)){</span>
+<span class="nc" id="L125">                paramsOutput = String.valueOf(requestToJson((HttpServletRequest)result));</span>
+            }
+
+<span class="nc" id="L128">        } finally {</span>
+<span class="nc" id="L129">            MDC.put(&quot;actualMethodName&quot;, joinPoint.getSignature().getName() + &quot; -&gt; Aspect methode : &quot; ) ;</span>
+<span class="nc" id="L130">            duration = currentTimeMillis() - start;</span>
+
+<span class="nc bnc" id="L132" title="All 4 branches missed.">            LOGGER.debug( prefixLog + &quot; API RETURN - &quot; + (isNotBlank(paramsOutput) ? paramsOutput.substring(0, (paramsOutput.length() &gt; numberDebugChar ? numberDebugChar : paramsOutput.length())) : &quot;&quot;));</span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">            if(statutResponse.equals(&quot;[KO]&quot;)){</span>
+<span class="nc" id="L134">                LOGGER.error(prefixLog + &quot; API ERROR - &quot; + joinPoint.getSignature().getName()+ &quot; [&quot; + duration + &quot; ms] &quot; + statutResponse);</span>
+            }
+<span class="nc bnc" id="L136" title="All 4 branches missed.">            LOGGER.info(prefixLog + &quot; API STOP - &quot; + joinPoint.getSignature().getName()+ &quot; [&quot; + duration + &quot; ms] &quot; + statutResponse + &quot; - Data output: &quot; + (isNotBlank(paramsOutput) ? paramsOutput.substring(0, (paramsOutput.length() &gt; numberInfoChar ? numberInfoChar : paramsOutput.length())) : &quot;&quot;));</span>
+<span class="nc" id="L137">            MDC.remove(&quot;actualMethodName&quot;);</span>
+<span class="nc bnc" id="L138" title="All 2 branches missed.">            if (result != null) MDC.remove(&quot;instanceId&quot;);</span>
+        }
+<span class="nc" id="L140">        return result;</span>
+    }
+
+    @Around(&quot;@annotation(fr.eql.matchingEngine.aspect.GLogService)&quot;)
+    public Object logAroundAllMethods(ProceedingJoinPoint joinPoint) throws Throwable {
+
+<span class="nc" id="L146">        Logger LOGGER = LoggerFactory.getLogger(joinPoint.getTarget().getClass());</span>
+
+<span class="nc" id="L148">        long start = currentTimeMillis();</span>
+<span class="nc" id="L149">        long duration = 0;</span>
+<span class="nc" id="L150">        String paramsOutput = null;</span>
+<span class="nc" id="L151">        Object result = null;</span>
+<span class="nc" id="L152">        String statutResponse = &quot;[KO]&quot;;</span>
+
+        try {
+<span class="nc" id="L155">            MDC.put(&quot;actualMethodName&quot;, joinPoint.getSignature().getName() + &quot; -&gt; Aspect methode : &quot; ) ;</span>
+
+<span class="nc" id="L157">            String paramsInput = &quot;[&quot;;</span>
+<span class="nc bnc" id="L158" title="All 2 branches missed.">            if(joinPoint.getArgs()!=null) {</span>
+<span class="nc bnc" id="L159" title="All 2 branches missed.">                for (Object oneArg : joinPoint.getArgs()){</span>
+<span class="nc bnc" id="L160" title="All 4 branches missed.">                    if(oneArg != null &amp;&amp; !oneArg.getClass().getName().contains(&quot;HttpServlet&quot;)){</span>
+<span class="nc" id="L161">                        Gson gson = new GsonBuilder().disableHtmlEscaping().create();</span>
+<span class="nc" id="L162">                        paramsInput += gson.toJson(oneArg) + &quot;,&quot;;</span>
+<span class="nc bnc" id="L163" title="All 4 branches missed.">                    }else if(oneArg != null &amp;&amp; oneArg.getClass().getName().contains(&quot;HttpServlet&quot;)){</span>
+<span class="nc" id="L164">                        paramsInput += String.valueOf(requestToJson((HttpServletRequest)oneArg)) + &quot;,&quot;;</span>
+                    }
+                }
+            }
+<span class="nc" id="L168">            paramsInput = paramsInput + &quot;]&quot;;</span>
+
+<span class="nc bnc" id="L170" title="All 4 branches missed.">            LOGGER.info(prefixLog + &quot; SERVICE START - &quot; + joinPoint.getSignature().getName() + &quot; - Data input : &quot; +  (isNotBlank(paramsInput) ? paramsInput.substring(0, (paramsInput.length() &gt; numberInfoChar ? numberInfoChar : paramsInput.length())) : &quot;&quot;));</span>
+
+<span class="nc bnc" id="L172" title="All 4 branches missed.">            LOGGER.debug(prefixLog + &quot; SERVICE RECEIVE - &quot; + (isNotBlank(paramsInput) ? paramsInput.substring(0, (paramsInput.length() &gt; numberDebugChar ? numberDebugChar : paramsInput.length())) : &quot;&quot;));</span>
+
+<span class="nc" id="L174">            MDC.remove(&quot;actualMethodName&quot;);</span>
+
+<span class="nc" id="L176">            result = joinPoint.proceed();</span>
+<span class="nc" id="L177">            statutResponse = &quot;[OK]&quot;;</span>
+
+<span class="nc" id="L179">            paramsOutput = &quot;&quot;;</span>
+<span class="nc bnc" id="L180" title="All 4 branches missed.">            if(result != null &amp;&amp; !result.getClass().getName().contains(&quot;HttpServlet&quot;)){</span>
+<span class="nc" id="L181">                Gson gson = new GsonBuilder().disableHtmlEscaping().create();</span>
+<span class="nc" id="L182">                paramsOutput = gson.toJson(result);</span>
+<span class="nc bnc" id="L183" title="All 4 branches missed.">            }else if(result != null &amp;&amp; result.getClass().getName().contains(&quot;HttpServlet&quot;)){</span>
+<span class="nc" id="L184">                paramsOutput = String.valueOf(requestToJson((HttpServletRequest)result));</span>
+            }
+
+<span class="nc" id="L187">        } finally {</span>
+<span class="nc" id="L188">            MDC.put(&quot;actualMethodName&quot;, joinPoint.getSignature().getName() + &quot; -&gt; Aspect methode : &quot; ) ;</span>
+<span class="nc" id="L189">            duration = currentTimeMillis() - start;</span>
+<span class="nc bnc" id="L190" title="All 4 branches missed.">            LOGGER.debug(prefixLog + &quot; SERVICE RETURN - &quot; + (isNotBlank(paramsOutput) ? paramsOutput.substring(0, (paramsOutput.length() &gt; numberDebugChar ? numberDebugChar : paramsOutput.length())) : &quot;&quot;));</span>
+<span class="nc bnc" id="L191" title="All 2 branches missed.">            if(statutResponse.equals(&quot;[KO]&quot;)){</span>
+<span class="nc" id="L192">                LOGGER.error(prefixLog + &quot; SERVICE ERROR - &quot; + joinPoint.getSignature().getName()+ &quot; [&quot; + duration + &quot; ms] &quot; + statutResponse);</span>
+            }
+<span class="nc bnc" id="L194" title="All 4 branches missed.">            LOGGER.info(prefixLog + &quot; SERVICE STOP - &quot; + joinPoint.getSignature().getName()+ &quot; [&quot; + duration + &quot; ms] &quot; + statutResponse + &quot; - Data output: &quot; + (isNotBlank(paramsOutput) ? paramsOutput.substring(0, (paramsOutput.length() &gt; numberInfoChar ? numberInfoChar : paramsOutput.length())) : &quot;&quot;));</span>
+<span class="nc" id="L195">            MDC.remove(&quot;actualMethodName&quot;);</span>
+        }
+<span class="nc" id="L197">        return result;</span>
+    }
+
+    @Around(&quot;anyEndPointCall()&quot;)
+    public Object logAroundEndPoint(ProceedingJoinPoint joinPoint) throws Throwable {
+
+<span class="nc" id="L203">        Logger LOGGER = LoggerFactory.getLogger(joinPoint.getTarget().getClass());</span>
+
+<span class="nc" id="L205">        long start = currentTimeMillis();</span>
+<span class="nc" id="L206">        long duration = 0;</span>
+<span class="nc" id="L207">        Object result = null;</span>
+<span class="nc" id="L208">        String paramsOutput = null;</span>
+<span class="nc" id="L209">        String statutResponse = &quot;[KO]&quot;;</span>
+
+        try {
+<span class="nc" id="L212">            MDC.put(&quot;actualMethodName&quot;, joinPoint.getSignature().getName() + &quot; -&gt; Aspect methode : &quot; ) ;</span>
+
+<span class="nc" id="L214">            String paramsInput = &quot;[&quot;;</span>
+<span class="nc bnc" id="L215" title="All 2 branches missed.">            if(joinPoint.getArgs()!=null) {</span>
+<span class="nc bnc" id="L216" title="All 2 branches missed.">                for (Object oneArg : joinPoint.getArgs()){</span>
+<span class="nc bnc" id="L217" title="All 4 branches missed.">                    if(oneArg != null &amp;&amp; !oneArg.getClass().getName().contains(&quot;HttpServlet&quot;)){</span>
+<span class="nc" id="L218">                        Gson gson = new GsonBuilder().disableHtmlEscaping().create();</span>
+<span class="nc" id="L219">                        paramsInput += gson.toJson(oneArg) + &quot;,&quot;;</span>
+<span class="nc bnc" id="L220" title="All 4 branches missed.">                    }else if(oneArg != null &amp;&amp; oneArg.getClass().getName().contains(&quot;HttpServlet&quot;)){</span>
+<span class="nc" id="L221">                        paramsInput += String.valueOf(requestToJson((HttpServletRequest)oneArg)) + &quot;,&quot;;</span>
+                    }
+                }
+            }
+<span class="nc" id="L225">            paramsInput = paramsInput + &quot;]&quot;;</span>
+
+<span class="nc bnc" id="L227" title="All 4 branches missed.">            LOGGER.info(prefixLog + &quot; CALL START - &quot; + joinPoint.getSignature().getName() + &quot; - Data input : &quot; +  (isNotBlank(paramsInput) ? paramsInput.substring(0, (paramsInput.length() &gt; numberInfoChar ? numberInfoChar : paramsInput.length())) : &quot;&quot;));</span>
+
+<span class="nc bnc" id="L229" title="All 4 branches missed.">            LOGGER.debug(prefixLog + &quot; CALL RECEIVE - &quot; + (isNotBlank(paramsInput) ? paramsInput.substring(0, (paramsInput.length() &gt; numberDebugChar ? numberDebugChar : paramsInput.length())) : &quot;&quot;));</span>
+<span class="nc" id="L230">            MDC.remove(&quot;actualMethodName&quot;);</span>
+
+<span class="nc" id="L232">            result = joinPoint.proceed();</span>
+<span class="nc" id="L233">            statutResponse = &quot;[OK]&quot;;</span>
+
+<span class="nc" id="L235">            paramsOutput = &quot;&quot;;</span>
+<span class="nc bnc" id="L236" title="All 4 branches missed.">            if(result != null &amp;&amp; !result.getClass().getName().contains(&quot;HttpServlet&quot;)){</span>
+<span class="nc" id="L237">                Gson gson = new GsonBuilder().disableHtmlEscaping().create();</span>
+<span class="nc" id="L238">                paramsOutput = gson.toJson(result);</span>
+<span class="nc bnc" id="L239" title="All 4 branches missed.">            }else if(result != null &amp;&amp; result.getClass().getName().contains(&quot;HttpServlet&quot;)){</span>
+<span class="nc" id="L240">                paramsOutput = String.valueOf(requestToJson((HttpServletRequest)result));</span>
+            }
+
+<span class="nc" id="L243">        } finally {</span>
+<span class="nc" id="L244">            MDC.put(&quot;actualMethodName&quot;, joinPoint.getSignature().getName() + &quot; -&gt; Aspect methode : &quot; ) ;</span>
+<span class="nc" id="L245">            duration = currentTimeMillis() - start;</span>
+<span class="nc bnc" id="L246" title="All 4 branches missed.">            LOGGER.debug(prefixLog + &quot; CALL RETURN - &quot; + (isNotBlank(paramsOutput) ? paramsOutput.substring(0, (paramsOutput.length() &gt; numberDebugChar ? numberDebugChar : paramsOutput.length())) : &quot;&quot;));</span>
+
+<span class="nc bnc" id="L248" title="All 2 branches missed.">            if(statutResponse.equals(&quot;[KO]&quot;)){</span>
+<span class="nc" id="L249">                LOGGER.error(prefixLog + &quot; CALL ERROR - &quot; + joinPoint.getSignature().getName()+ &quot; [&quot; + duration + &quot; ms] &quot; + statutResponse);</span>
+            }
+<span class="nc bnc" id="L251" title="All 4 branches missed.">            LOGGER.info(prefixLog + &quot; CALL STOP - &quot; + joinPoint.getSignature().getName()+ &quot; [&quot; + duration + &quot; ms] &quot; + statutResponse+ &quot; - Data output: &quot; + (isNotBlank(paramsOutput) ? paramsOutput.substring(0, (paramsOutput.length() &gt; numberInfoChar ? numberInfoChar : paramsOutput.length())) : &quot;&quot;));</span>
+<span class="nc" id="L252">            MDC.remove(&quot;actualMethodName&quot;);</span>
+        }
+<span class="nc" id="L254">        return result;</span>
+    }
+
+    private Object getParameter(ProceedingJoinPoint joinPoint, String parameterName) {
+<span class="nc" id="L258">        Object valueParameter = null;</span>
+<span class="nc bnc" id="L259" title="All 4 branches missed.">        if (Objects.nonNull(joinPoint) &amp;&amp; joinPoint.getSignature() instanceof MethodSignature</span>
+<span class="nc bnc" id="L260" title="All 2 branches missed.">                &amp;&amp; Objects.nonNull(parameterName) ) {</span>
+<span class="nc" id="L261">            MethodSignature method = (MethodSignature)joinPoint.getSignature();</span>
+<span class="nc" id="L262">            String[] parameters = method.getParameterNames();</span>
+<span class="nc bnc" id="L263" title="All 2 branches missed.">            for (int t = 0; t&lt; parameters.length; t++) {</span>
+<span class="nc bnc" id="L264" title="All 4 branches missed.">                if( Objects.nonNull(parameters[t]) &amp;&amp; parameters[t].equals(parameterName)) {</span>
+<span class="nc" id="L265">                    Object[] obj = joinPoint.getArgs();</span>
+<span class="nc" id="L266">                    valueParameter = obj[t];</span>
+                }
+            }
+        }
+<span class="nc" id="L270">        return valueParameter;</span>
+    }
+
+    public JsonObject requestToJson(HttpServletRequest request){
+<span class="nc" id="L274">        JsonObject jsonObject = new JsonObject();</span>
+<span class="nc" id="L275">        StringBuffer jb = new StringBuffer();</span>
+<span class="nc" id="L276">        String line = null;</span>
+        try {
+<span class="nc" id="L278">            BufferedReader reader = request.getReader();</span>
+<span class="nc bnc" id="L279" title="All 2 branches missed.">            while ((line = reader.readLine()) != null)</span>
+<span class="nc" id="L280">                jb.append(line);</span>
+<span class="nc" id="L281">        } catch (Exception e) { /*report an error*/ }</span>
+<span class="nc bnc" id="L282" title="All 2 branches missed.">        if(isNotBlank(jb.toString())){</span>
+<span class="nc" id="L283">            jsonObject =  new JsonParser().parse(jb.toString()).getAsJsonObject();</span>
+        }
+<span class="nc" id="L285">        return jsonObject;</span>
+    }
+
+    // Added to get data from application.yml
+    // Data in pointcut must be constant can not be from application.yml
+    // solution to be continued if not possible implement aop.xml
+    /*@Value(&quot;${aspect.package.api}&quot;)
+    List&lt;String&gt; packageToLog;
+
+    String test = &quot;&quot;;
+
+    public static final String EXECUTION_PUBLIC_GET = new String(&quot;execution(* fr.eql.matchingEngine.exception..*.*(..))&quot;);
+
+    @PostConstruct
+    public void init() throws Exception {
+        int i= 0;
+        for(String tt:packageToLog){
+            i+=1;
+            test += &quot;execution(*&quot; + tt + &quot;..*.*(..))&quot;;
+            if(i&lt;packageToLog.size()){
+                test += &quot; || &quot;;
+            }
+        }
+
+        setFinalStaticField(LoggingAspect.class, &quot;EXECUTION_PUBLIC_GET&quot;, test);
+
+        String mmm = EXECUTION_PUBLIC_GET;
+        Field fff = LoggingAspect.class.getDeclaredField(&quot;EXECUTION_PUBLIC_GET&quot;);
+        Object value = fff.get(this);
+    }
+
+    private static void setFinalStaticField(Class&lt;?&gt; clazz, String fieldName, Object value)
+            throws ReflectiveOperationException {
+
+        Field field = clazz.getDeclaredField(fieldName);
+        field.setAccessible(true);
+
+        Field modifiers = Field.class.getDeclaredField(&quot;modifiers&quot;);
+        modifiers.setAccessible(true);
+        modifiers.setInt(field, field.getModifiers() &amp; ~Modifier.FINAL);
+
+        field.set(null, value);
+    }*/
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Response.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">matchingEngine</a> &gt; <a href="index.source.html" class="el_package">fr.eql.matchingEngine.dto.response</a> &gt; <span class="el_source">Response.java</span></div><h1>Response.java</h1><pre class="source lang-java linenums">package fr.eql.matchingEngine.dto.response;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import java.util.Date;
+
+/**
+ * Created by BEN MALEK S. on 25/06/2020.
+ */
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
+<span class="nc" id="L14">public class Response&lt;T&gt; {</span>
+
+    private Status status;
+    private T payload;
+    private Object errors;
+    private Object metadata;
+
+    public Status getStatus() {
+<span class="nc" id="L22">        return status;</span>
+    }
+
+    public void setStatus(Status status) {
+<span class="nc" id="L26">        this.status = status;</span>
+<span class="nc" id="L27">    }</span>
+
+    public T getPayload() {
+<span class="nc" id="L30">        return payload;</span>
+    }
+
+    public void setPayload(T payload) {
+<span class="nc" id="L34">        this.payload = payload;</span>
+<span class="nc" id="L35">    }</span>
+
+    public Object getErrors() {
+<span class="nc" id="L38">        return errors;</span>
+    }
+
+    public void setErrors(Object errors) {
+<span class="nc" id="L42">        this.errors = errors;</span>
+<span class="nc" id="L43">    }</span>
+
+    public Object getMetadata() {
+<span class="nc" id="L46">        return metadata;</span>
+    }
+
+    public void setMetadata(Object metadata) {
+<span class="nc" id="L50">        this.metadata = metadata;</span>
+<span class="nc" id="L51">    }</span>
+
+    public static &lt;T&gt; Response&lt;T&gt; badRequest() {
+<span class="nc" id="L54">        Response&lt;T&gt; response = new Response&lt;&gt;();</span>
+<span class="nc" id="L55">        response.setStatus(Status.BAD_REQUEST);</span>
+<span class="nc" id="L56">        return response;</span>
+    }
+
+    public static &lt;T&gt; Response&lt;T&gt; forbidden() {
+<span class="nc" id="L60">        Response&lt;T&gt; response = new Response&lt;&gt;();</span>
+<span class="nc" id="L61">        response.setStatus(Status.FORBIDDEN);</span>
+<span class="nc" id="L62">        return response;</span>
+    }
+
+    public static &lt;T&gt; Response&lt;T&gt; ok() {
+<span class="nc" id="L66">        Response&lt;T&gt; response = new Response&lt;&gt;();</span>
+<span class="nc" id="L67">        response.setStatus(Status.OK);</span>
+<span class="nc" id="L68">        return response;</span>
+    }
+
+    public static &lt;T&gt; Response&lt;T&gt; unauthorized() {
+<span class="nc" id="L72">        Response&lt;T&gt; response = new Response&lt;&gt;();</span>
+<span class="nc" id="L73">        response.setStatus(Status.UNAUTHORIZED);</span>
+<span class="nc" id="L74">        return response;</span>
+    }
+
+    public static &lt;T&gt; Response&lt;T&gt; validationException() {
+<span class="nc" id="L78">        Response&lt;T&gt; response = new Response&lt;&gt;();</span>
+<span class="nc" id="L79">        response.setStatus(Status.VALIDATION_EXCEPTION);</span>
+<span class="nc" id="L80">        return response;</span>
+    }
+
+    public static &lt;T&gt; Response&lt;T&gt; wrongCredentials() {
+<span class="nc" id="L84">        Response&lt;T&gt; response = new Response&lt;&gt;();</span>
+<span class="nc" id="L85">        response.setStatus(Status.WRONG_CREDENTIALS);</span>
+<span class="nc" id="L86">        return response;</span>
+    }
+
+    public static &lt;T&gt; Response&lt;T&gt; accessDenied() {
+<span class="nc" id="L90">        Response&lt;T&gt; response = new Response&lt;&gt;();</span>
+<span class="nc" id="L91">        response.setStatus(Status.ACCESS_DENIED);</span>
+<span class="nc" id="L92">        return response;</span>
+    }
+
+    public static &lt;T&gt; Response&lt;T&gt; exception() {
+<span class="nc" id="L96">        Response&lt;T&gt; response = new Response&lt;&gt;();</span>
+<span class="nc" id="L97">        response.setStatus(Status.EXCEPTION);</span>
+<span class="nc" id="L98">        return response;</span>
+    }
+
+    public static &lt;T&gt; Response&lt;T&gt; notFound() {
+<span class="nc" id="L102">        Response&lt;T&gt; response = new Response&lt;&gt;();</span>
+<span class="nc" id="L103">        response.setStatus(Status.NOT_FOUND);</span>
+<span class="nc" id="L104">        return response;</span>
+    }
+
+    public static &lt;T&gt; Response&lt;T&gt; duplicateEntity() {
+<span class="nc" id="L108">        Response&lt;T&gt; response = new Response&lt;&gt;();</span>
+<span class="nc" id="L109">        response.setStatus(Status.DUPLICATE_ENTITY);</span>
+<span class="nc" id="L110">        return response;</span>
+    }
+
+    public void addErrorMsgToResponse(String errorMsg, Exception ex) {
+<span class="nc" id="L114">        ResponseError error = new ResponseError();</span>
+<span class="nc" id="L115">        error.setDetails(errorMsg);</span>
+<span class="nc" id="L116">        error.setMessage(ex.getMessage());</span>
+<span class="nc" id="L117">        error.setTimestamp(new Date());</span>
+<span class="nc" id="L118">        setErrors(error);</span>
+<span class="nc" id="L119">    }</span>
+
+<span class="nc" id="L121">    public enum Status {</span>
+<span class="nc" id="L122">        OK, BAD_REQUEST, FORBIDDEN, UNAUTHORIZED, VALIDATION_EXCEPTION, EXCEPTION, WRONG_CREDENTIALS, ACCESS_DENIED, NOT_FOUND, DUPLICATE_ENTITY</span>
+    }
+
+
+    //@Accessors(chain = true)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    public static class PageMetadata {
+        private int size;
+        private long totalElements;
+        private int totalPages;
+        private int number;
+
+        public int getSize() {
+<span class="nc" id="L136">            return size;</span>
+        }
+
+        public long getTotalElements() {
+<span class="nc" id="L140">            return totalElements;</span>
+        }
+
+        public int getTotalPages() {
+<span class="nc" id="L144">            return totalPages;</span>
+        }
+
+        public int getNumber() {
+<span class="nc" id="L148">            return number;</span>
+        }
+
+<span class="nc" id="L151">        public PageMetadata(int size, long totalElements, int totalPages, int number) {</span>
+<span class="nc" id="L152">            this.size = size;</span>
+<span class="nc" id="L153">            this.totalElements = totalElements;</span>
+<span class="nc" id="L154">            this.totalPages = totalPages;</span>
+<span class="nc" id="L155">            this.number = number;</span>
+<span class="nc" id="L156">        }</span>
+    }
+
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

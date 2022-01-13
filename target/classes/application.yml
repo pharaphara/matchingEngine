@@ -1,0 +1,58 @@
+
+
+
+logging:
+    file: /data/local/tomcat/logs/matchingEngine.log
+    config: classpath:logback.xml
+    prefix: GLOG
+    numberInfoChar: 1000
+    numberDebugChar: 10000
+
+project:
+    name: matchingEngine
+    wiki: https://www.google.fr
+    
+spring:
+  data:
+    jpa:
+      repositories:
+        enabled: 'true'
+  datasource:
+    username: root
+    url: jdbc:mysql://localhost:3306/matchingengine?createDatabaseIfNotExist=true&serverTimezone=UTC
+    driverClassName: com.mysql.cj.jdbc.Driver
+    password: root
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL57Dialect
+    hibernate:
+      ddl-auto: create
+      
+server:
+
+  port: '8483'
+springdoc:
+  swagger-ui:
+    path: /doc-swagger.html
+
+    
+
+
+---
+#dev config
+spring:
+    profiles: dev
+
+app:
+    username: test
+    password: test
+
+
+---
+#prod config
+spring:
+    profiles: test
+
+app:
+    username: test
+    password: test
+
