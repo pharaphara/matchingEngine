@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ExempleController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">matchingEngine</a> &gt; <a href="index.source.html" class="el_package">fr.eql.matchingEngine.controller</a> &gt; <span class="el_source">ExempleController.java</span></div><h1>ExempleController.java</h1><pre class="source lang-java linenums">package fr.eql.matchingEngine.controller;
+
+import static org.apache.logging.log4j.util.Strings.isNotBlank;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.StopWatch;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import fr.eql.matchingEngine.dto.model.GeobusApiModel;
+import fr.eql.matchingEngine.dto.model.Message;
+import fr.eql.matchingEngine.endpointservices.servicesinterface.EmployeeExternalServices;
+import fr.eql.matchingEngine.services.servicesinterface.EmployeeServices;
+
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.Map;
+
+
+
+@RestController
+@RequestMapping(&quot;/exemple&quot;)
+@Api(description = &quot;Example of a controller for testing our API structure.&quot;)
+<span class="nc" id="L38">public class ExempleController {</span>
+
+    @Autowired
+    EmployeeServices exempleServices;
+
+    @Autowired
+    EmployeeExternalServices exempleExternalServices;
+
+    @Value(&quot;${project.name}&quot;)
+    String projectName;
+
+<span class="nc" id="L49">    Logger log = LoggerFactory.getLogger(ExempleController.class);</span>
+
+
+    @RequestMapping(
+            path = {&quot;/myapi&quot;},
+            method = {RequestMethod.POST}
+    )
+
+    @ApiOperation(&quot;Example endpoint : return a welcome message.&quot;)
+    public ResponseEntity&lt;Message&gt; myApiExemple(
+            @ApiParam(&quot;Must be a json object contains value to add to header : {\&quot;key\&quot;: \&quot;value, \&quot;key1\&quot;: \&quot;value1}&quot;) @RequestHeader(required=false) Map&lt;String, String&gt; headers,
+                                                @RequestHeader(required=false) String geobusInstanceId,
+                                                @RequestBody GeobusApiModel name) throws Exception{
+
+            //Add data to headers
+<span class="nc" id="L64">             HttpHeaders totalRecHeaders = new HttpHeaders();</span>
+<span class="nc" id="L65">             HttpHeaders responseHeaders = new HttpHeaders();</span>
+<span class="nc bnc" id="L66" title="All 4 branches missed.">            if (headers.keySet().contains(&quot;headers&quot;) &amp;&amp; isNotBlank(headers.get(&quot;headers&quot;))) {</span>
+
+<span class="nc" id="L68">                String dataAddHeaders = headers.get(&quot;headers&quot;);</span>
+<span class="nc" id="L69">                JSONObject jsonObject = new JSONObject(dataAddHeaders);</span>
+<span class="nc" id="L70">                Iterator&lt;String&gt; keys = jsonObject.keys();</span>
+
+<span class="nc bnc" id="L72" title="All 2 branches missed.">                while(keys.hasNext()) {</span>
+<span class="nc" id="L73">                    String key = keys.next();</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">                    if (isNotBlank(jsonObject.get(key).toString())) {</span>
+<span class="nc" id="L75">                        headers.put(key, jsonObject.get(key).toString());</span>
+<span class="nc" id="L76">                        responseHeaders.put(key, Collections.singletonList(jsonObject.get(key).toString()));</span>
+                    }
+                }
+<span class="nc" id="L79">                headers.remove(&quot;headers&quot;);</span>
+            }
+
+<span class="nc bnc" id="L82" title="All 2 branches missed.">            for (Map.Entry&lt;String, String&gt; entry : headers.entrySet()) {</span>
+<span class="nc" id="L83">                totalRecHeaders.put(entry.getKey(), Collections.singletonList(entry.getValue()));</span>
+            }
+
+<span class="nc" id="L86">            Message msg = new Message();</span>
+<span class="nc" id="L87">            String text = exempleServices.addDescription(name);</span>
+<span class="nc" id="L88">            text = exempleServices.addSecondDesc(text);</span>
+<span class="nc" id="L89">            msg.setMsg(text);</span>
+
+<span class="nc" id="L91">            Message msgExternal = new Message();</span>
+<span class="nc" id="L92">            String textExt = exempleExternalServices.postDescription(name);</span>
+<span class="nc" id="L93">            msgExternal.setMsg(textExt);</span>
+
+
+<span class="nc bnc" id="L96" title="All 2 branches missed.">        if (headers.keySet().contains(&quot;content-type&quot;))</span>
+<span class="nc" id="L97">            responseHeaders.setContentType(MediaType.valueOf(headers.get(&quot;content-type&quot;)));</span>
+<span class="nc" id="L98">        else responseHeaders.setContentType(MediaType.valueOf(&quot;application/json;charset=UTF-8&quot;));</span>
+
+<span class="nc" id="L100">            return new ResponseEntity&lt;&gt;(msg, responseHeaders, HttpStatus.OK);</span>
+
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

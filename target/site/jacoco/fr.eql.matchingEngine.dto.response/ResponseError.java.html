@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ResponseError.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">matchingEngine</a> &gt; <a href="index.source.html" class="el_package">fr.eql.matchingEngine.dto.response</a> &gt; <span class="el_source">ResponseError.java</span></div><h1>ResponseError.java</h1><pre class="source lang-java linenums">package fr.eql.matchingEngine.dto.response;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+import java.util.Date;
+
+
+/**
+ * Created by BEN MALEK S. on 25/06/2020.
+ */
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
+<span class="nc" id="L15">public class ResponseError {</span>
+    public Date getTimestamp() {
+<span class="nc" id="L17">        return timestamp;</span>
+    }
+
+    public void setTimestamp(Date timestamp) {
+<span class="nc" id="L21">        this.timestamp = timestamp;</span>
+<span class="nc" id="L22">    }</span>
+
+    public String getMessage() {
+<span class="nc" id="L25">        return message;</span>
+    }
+
+    public void setMessage(String message) {
+<span class="nc" id="L29">        this.message = message;</span>
+<span class="nc" id="L30">    }</span>
+
+    public String getDetails() {
+<span class="nc" id="L33">        return details;</span>
+    }
+
+    public void setDetails(String details) {
+<span class="nc" id="L37">        this.details = details;</span>
+<span class="nc" id="L38">    }</span>
+
+    private Date timestamp;
+    private String message;
+    private String details;
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -1,0 +1,36 @@
+server:
+    port: 8095
+
+
+logging:
+    file: /data/local/tomcat/logs/matchingEngine.log
+    config: classpath:logback.xml
+    prefix: GLOG
+    numberInfoChar: 1000
+    numberDebugChar: 10000
+
+project:
+    name: matchingEngine
+    wiki: https://www.google.fr
+    
+
+
+---
+#dev config
+spring:
+    profiles: dev
+
+app:
+    username: test
+    password: test
+
+
+---
+#prod config
+spring:
+    profiles: test
+
+app:
+    username: test
+    password: test
+

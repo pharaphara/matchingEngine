@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RestResponseEntityExceptionHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">matchingEngine</a> &gt; <a href="index.source.html" class="el_package">fr.eql.matchingEngine.exception</a> &gt; <span class="el_source">RestResponseEntityExceptionHandler.java</span></div><h1>RestResponseEntityExceptionHandler.java</h1><pre class="source lang-java linenums">package fr.eql.matchingEngine.exception;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import fr.eql.matchingEngine.dto.response.Response;
+
+/**
+ * Created by BEN MALEK S. on 25/06/2020.
+ *
+ */
+
+@ControllerAdvice
+
+<span class="nc" id="L23">public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {</span>
+
+<span class="nc" id="L25">    Logger LOGGER = LoggerFactory.getLogger(RestResponseEntityExceptionHandler.class);</span>
+
+    @ResponseStatus(value= HttpStatus.NOT_FOUND)
+    @ExceptionHandler({HttpClientErrorException.NotFound.class})
+    public ResponseEntity handleNotFoundExceptions(HttpClientErrorException.NotFound ex) {
+<span class="nc" id="L30">        ex.printStackTrace();</span>
+<span class="nc" id="L31">        LOGGER.error(&quot;NOT FOUND : &quot;, ex);</span>
+<span class="nc" id="L32">        Response response = Response.notFound();</span>
+<span class="nc" id="L33">        response.addErrorMsgToResponse(ex.getMessage(), ex);</span>
+<span class="nc" id="L34">        MDC.clear();</span>
+<span class="nc" id="L35">        return new ResponseEntity(response, HttpStatus.NOT_FOUND);</span>
+    }
+
+    @ResponseStatus(value= HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({HttpClientErrorException.BadRequest.class})
+    public ResponseEntity handleBadRequestExceptions(HttpClientErrorException.BadRequest ex) {
+<span class="nc" id="L41">        ex.printStackTrace();</span>
+<span class="nc" id="L42">        LOGGER.error(&quot;BAD REQUEST : &quot;, ex);</span>
+<span class="nc" id="L43">        Response response = Response.badRequest();</span>
+<span class="nc" id="L44">        response.addErrorMsgToResponse(ex.getMessage(), ex);</span>
+<span class="nc" id="L45">        MDC.clear();</span>
+<span class="nc" id="L46">        return new ResponseEntity(response, HttpStatus.BAD_REQUEST);</span>
+    }
+
+    @ResponseStatus(value= HttpStatus.BAD_REQUEST)
+    @ExceptionHandler({BadRequestException.class})
+    public ResponseEntity handleInternBadRequestExceptions(BadRequestException ex) {
+<span class="nc" id="L52">        ex.printStackTrace();</span>
+<span class="nc" id="L53">        LOGGER.error(&quot;BAD REQUEST : &quot;, ex);</span>
+<span class="nc" id="L54">        Response response = Response.badRequest();</span>
+<span class="nc" id="L55">        response.addErrorMsgToResponse(ex.getMessage(), ex);</span>
+<span class="nc" id="L56">        MDC.clear();</span>
+<span class="nc" id="L57">        return new ResponseEntity(response, HttpStatus.BAD_REQUEST);</span>
+    }
+
+    @ResponseStatus(value= HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler({HttpClientErrorException.Unauthorized.class})
+    public ResponseEntity handleUnauthorizedExceptions(HttpClientErrorException.Unauthorized ex) {
+<span class="nc" id="L63">        ex.printStackTrace();</span>
+<span class="nc" id="L64">        LOGGER.error(&quot;UNAUTHORIZED : &quot;, ex);</span>
+<span class="nc" id="L65">        Response response = Response.unauthorized();</span>
+<span class="nc" id="L66">        response.addErrorMsgToResponse(ex.getMessage(), ex);</span>
+<span class="nc" id="L67">        MDC.clear();</span>
+<span class="nc" id="L68">        return new ResponseEntity(response, HttpStatus.UNAUTHORIZED);</span>
+    }
+
+    @ResponseStatus(value= HttpStatus.FORBIDDEN)
+    @ExceptionHandler({HttpClientErrorException.Forbidden.class})
+    public ResponseEntity handleForbiddenExceptions(HttpClientErrorException.Forbidden ex) {
+<span class="nc" id="L74">        ex.printStackTrace();</span>
+<span class="nc" id="L75">        LOGGER.error(&quot;FORBIDDEN : &quot;, ex);</span>
+<span class="nc" id="L76">        Response response = Response.forbidden();</span>
+<span class="nc" id="L77">        response.addErrorMsgToResponse(ex.getMessage(), ex);</span>
+<span class="nc" id="L78">        MDC.clear();</span>
+<span class="nc" id="L79">        return new ResponseEntity(response, HttpStatus.FORBIDDEN);</span>
+    }
+
+    @ResponseStatus(value= HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler({Exception.class})
+    public ResponseEntity handleExceptions(Exception ex) {
+<span class="nc" id="L85">        ex.printStackTrace();</span>
+<span class="nc" id="L86">        LOGGER.error(&quot;Exception : &quot;, ex);</span>
+<span class="nc" id="L87">        Response response = Response.exception();</span>
+<span class="nc" id="L88">        response.addErrorMsgToResponse(ex.getMessage(), ex);</span>
+<span class="nc" id="L89">        MDC.clear();</span>
+<span class="nc" id="L90">        return new ResponseEntity(response, HttpStatus.INTERNAL_SERVER_ERROR);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
