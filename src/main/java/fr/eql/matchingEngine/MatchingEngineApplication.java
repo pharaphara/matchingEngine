@@ -10,6 +10,7 @@ public class MatchingEngineApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(MatchingEngineApplication.class, args);
+		System.out.println("ready");
 	}
 
 }
