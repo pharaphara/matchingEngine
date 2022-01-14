@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import fr.eql.matchingEngine.dao.OrderRepository;
 import fr.eql.matchingEngine.dto.constant.OrderStatus;
-import fr.eql.matchingEngine.dto.model.GeobusApiModel;
 import fr.eql.matchingEngine.dto.model.OrderDTO;
 import fr.eql.matchingEngine.dto.model.Ordre;
 import fr.eql.matchingEngine.services.servicesinterface.OrderServices;
@@ -43,6 +42,11 @@ public class OrderController {
 		
 		
 		return orderServices.newOrder(newOrder);
+	}
+	
+	@GetMapping("/myOrders")
+	public ResponseEntity<?> getOrdersByUser(@RequestParam String user){
+		return new ResponseEntity<Object>(orderRepository.findByUser(user), HttpStatus.OK) ;
 	}
 	
 	@GetMapping("/status")

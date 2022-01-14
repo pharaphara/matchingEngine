@@ -2,7 +2,6 @@ package fr.eql.matchingEngine.dto.model;
 
 import java.time.LocalDateTime;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -45,17 +44,17 @@ public class Ordre {
 	/**
      * amount in base currency
 	 */
-	private float amount;
+	private double amount;
 	
 	/**
      * amount in base currency
 	 */
-	private float filledamount;
+	private double filledamount;
 	
 	/**
      * desired price in counter currency for 1 unit of base currency
      */
-	private float limitPrice;
+	private double limitPrice;
 	
 	/**
      * order status
@@ -75,8 +74,8 @@ public class Ordre {
 		super();
 	}
 
-	public Ordre(int id, String user, TradingPair currencyPair, OrderType orderType, float amount, float filledamount,
-			float limitPrice, OrderStatus status, LocalDateTime creationDate) {
+	public Ordre(int id, String user, TradingPair currencyPair, OrderType orderType, double amount, double filledamount,
+			double limitPrice, OrderStatus status, LocalDateTime creationDate) {
 		super();
 		this.id = id;
 		this.user = user;
@@ -121,27 +120,27 @@ public class Ordre {
 		this.orderType = orderType;
 	}
 
-	public float getAmount() {
+	public double getAmount() {
 		return amount;
 	}
 
-	public void setAmount(float amount) {
+	public void setAmount(double amount) {
 		this.amount = amount;
 	}
 
-	public float getFilledamount() {
+	public double getFilledamount() {
 		return filledamount;
 	}
 
-	public void setFilledamount(float filledamount) {
+	public void setFilledamount(double filledamount) {
 		this.filledamount = filledamount;
 	}
 
-	public float getLimitPrice() {
+	public double getLimitPrice() {
 		return limitPrice;
 	}
 
-	public void setLimitPrice(float limitPrice) {
+	public void setLimitPrice(double limitPrice) {
 		this.limitPrice = limitPrice;
 	}
 

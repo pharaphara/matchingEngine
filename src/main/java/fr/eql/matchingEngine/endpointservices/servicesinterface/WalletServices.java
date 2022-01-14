@@ -8,4 +8,6 @@ public interface WalletServices {
 
 	void updateWallets(List<Ordre> orderList);
 
+	void updateWallets(Ordre bID);
+
 }
