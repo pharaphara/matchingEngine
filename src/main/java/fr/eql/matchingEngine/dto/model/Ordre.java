@@ -2,18 +2,24 @@ package fr.eql.matchingEngine.dto.model;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import fr.eql.matchingEngine.dto.model.Constants.OrderStatus;
-import fr.eql.matchingEngine.dto.model.Constants.TradingPair;
+import fr.eql.matchingEngine.dto.constant.OrderStatus;
+import fr.eql.matchingEngine.dto.constant.OrderType;
+import fr.eql.matchingEngine.dto.constant.TradingPair;
+
 
 @Entity
-public class Order {
+public class Ordre {
 	
 	@Id
-	@GeneratedValue
+	@GeneratedValue (strategy=GenerationType.IDENTITY)
 	private int id;
 	
 
@@ -25,13 +31,16 @@ public class Order {
 	/**
 	 * BASE/COUNTER, ex : BTC/USD, ETH/EUR
 	 */
-	private Constants.TradingPair currencyPair;
+	 @Enumerated(EnumType.STRING)
+	private TradingPair currencyPair;
 	
 	 /**
       * BID=Buying order (the trader is providing the counter currency)
 	  * ASK=Selling order (the trader is providing the base currency)
 	  */
-	private String orderType ; 
+	
+    @Enumerated(EnumType.STRING)
+	private OrderType orderType ; 
 	
 	/**
      * amount in base currency
@@ -51,18 +60,22 @@ public class Order {
 	/**
      * order status
 	 */
-	private Constants.OrderStatus status;
+	 @Enumerated(EnumType.STRING)
+	private OrderStatus status;
 
 	/**
      * timestamp of creation date
 	 */
-	private LocalDateTime creationDate;
 
-	public Order() {
+	private LocalDateTime creationDate;
+	
+	
+
+	public Ordre() {
 		super();
 	}
 
-	public Order(int id, String user, TradingPair currencyPair, String orderType, float amount, float filledamount,
+	public Ordre(int id, String user, TradingPair currencyPair, OrderType orderType, float amount, float filledamount,
 			float limitPrice, OrderStatus status, LocalDateTime creationDate) {
 		super();
 		this.id = id;
@@ -92,19 +105,19 @@ public class Order {
 		this.user = user;
 	}
 
-	public Constants.TradingPair getCurrencyPair() {
+	public TradingPair getCurrencyPair() {
 		return currencyPair;
 	}
 
-	public void setCurrencyPair(Constants.TradingPair currencyPair) {
+	public void setCurrencyPair(TradingPair currencyPair) {
 		this.currencyPair = currencyPair;
 	}
 
-	public String getOrderType() {
+	public OrderType getOrderType() {
 		return orderType;
 	}
 
-	public void setOrderType(String orderType) {
+	public void setOrderType(OrderType orderType) {
 		this.orderType = orderType;
 	}
 
@@ -132,11 +145,11 @@ public class Order {
 		this.limitPrice = limitPrice;
 	}
 
-	public Constants.OrderStatus getStatus() {
+	public OrderStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(Constants.OrderStatus status) {
+	public void setStatus(OrderStatus status) {
 		this.status = status;
 	}
 
@@ -150,10 +163,12 @@ public class Order {
 
 	@Override
 	public String toString() {
-		return "Order [id=" + id + ", user=" + user + ", currencyPair=" + currencyPair + ", orderType=" + orderType
+		return "Ordre [id=" + id + ", user=" + user + ", currencyPair=" + currencyPair + ", orderType=" + orderType
 				+ ", amount=" + amount + ", filledamount=" + filledamount + ", limitPrice=" + limitPrice + ", status="
 				+ status + ", creationDate=" + creationDate + "]";
 	}
+
+	
 	
 	
 	

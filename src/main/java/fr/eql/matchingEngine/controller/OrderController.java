@@ -2,16 +2,20 @@ package fr.eql.matchingEngine.controller;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import fr.eql.matchingEngine.dao.OrderRepository;
+import fr.eql.matchingEngine.dto.constant.OrderStatus;
 import fr.eql.matchingEngine.dto.model.GeobusApiModel;
-import fr.eql.matchingEngine.dto.model.Order;
 import fr.eql.matchingEngine.dto.model.OrderDTO;
+import fr.eql.matchingEngine.dto.model.Ordre;
 import fr.eql.matchingEngine.services.servicesinterface.OrderServices;
 
 @RestController
@@ -20,6 +24,9 @@ public class OrderController {
 	
 	@Autowired
 	OrderServices orderServices;
+	
+	@Autowired
+	OrderRepository orderRepository;
 
 	@GetMapping("/hello")
 	public String hello(){
@@ -27,14 +34,20 @@ public class OrderController {
 		
 	}
 	
-	@PostMapping("bookOrder/order")
+	@PostMapping("/order")
 	public ResponseEntity<?> newOrder(@RequestBody OrderDTO orderdto){
 		
-		Order order = new Order();
+		Ordre newOrder = new Ordre();
 		
-		BeanUtils.copyProperties(orderdto, order);
+		BeanUtils.copyProperties(orderdto, newOrder);
 		
 		
-		return orderServices.newOrder(order);
+		return orderServices.newOrder(newOrder);
 	}
+	
+	@GetMapping("/status")
+	public ResponseEntity<?> getByStatus(@RequestParam OrderStatus status){
+		return new ResponseEntity<Object>(orderRepository.findByStatus(status), HttpStatus.OK) ;
+	}
+
 }

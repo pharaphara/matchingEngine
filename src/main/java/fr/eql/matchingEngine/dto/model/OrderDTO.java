@@ -1,5 +1,7 @@
 package fr.eql.matchingEngine.dto.model;
 
+import fr.eql.matchingEngine.dto.constant.OrderType;
+import fr.eql.matchingEngine.dto.constant.TradingPair;
 
 public class OrderDTO {
 	
@@ -11,13 +13,13 @@ public class OrderDTO {
 	/**
 	 * BASE/COUNTER, ex : BTC/USD, ETH/EUR
 	 */
-	private String currencyPair;
+	private TradingPair currencyPair;
 	
 	 /**
       * BID=Buying order (the trader is providing the counter currency)
 	  * ASK=Selling order (the trader is providing the base currency)
 	  */
-	private String orderType; 
+	private OrderType orderType; 
 	
 	/**
      * amount in base currency
@@ -29,17 +31,17 @@ public class OrderDTO {
 	 */
 	private float limitPrice;
 
-	public OrderDTO(String user, String currencyPair, String orderType, float amount, float limitPrice) {
+	public OrderDTO() {
+		super();
+	}
+
+	public OrderDTO(String user, TradingPair currencyPair, OrderType orderType, float amount, float limitPrice) {
 		super();
 		this.user = user;
 		this.currencyPair = currencyPair;
 		this.orderType = orderType;
 		this.amount = amount;
 		this.limitPrice = limitPrice;
-	}
-
-	public OrderDTO() {
-		super();
 	}
 
 	public String getUser() {
@@ -50,19 +52,19 @@ public class OrderDTO {
 		this.user = user;
 	}
 
-	public String getCurrencyPair() {
+	public TradingPair getCurrencyPair() {
 		return currencyPair;
 	}
 
-	public void setCurrencyPair(String currencyPair) {
+	public void setCurrencyPair(TradingPair currencyPair) {
 		this.currencyPair = currencyPair;
 	}
 
-	public String getOrderType() {
-		return this.orderType;
+	public OrderType getOrderType() {
+		return orderType;
 	}
 
-	public void setOrderType(String orderType) {
+	public void setOrderType(OrderType orderType) {
 		this.orderType = orderType;
 	}
 
@@ -84,12 +86,11 @@ public class OrderDTO {
 
 	@Override
 	public String toString() {
-		return "orderDTO [user=" + user + ", currencyPair=" + currencyPair + ", OrderType=" + orderType + ", amount="
+		return "OrderDTO [user=" + user + ", currencyPair=" + currencyPair + ", orderType=" + orderType + ", amount="
 				+ amount + ", limitPrice=" + limitPrice + "]";
 	}
 	
 	
-	
-	
-
 }
+
+	

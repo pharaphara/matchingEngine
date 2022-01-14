@@ -1,6 +1,4 @@
 
-
-
 logging:
     file: /data/local/tomcat/logs/matchingEngine.log
     config: classpath:logback.xml
@@ -9,27 +7,46 @@ logging:
     numberDebugChar: 10000
 
 project:
-    name: matchingEngine
+    name: match
     wiki: https://www.google.fr
     
+#spring:
+#  data:
+#    jpa:
+#      repositories:
+#        enabled: 'true'
+#  datasource:
+#    username: root
+#    url: jdbc:mysql://localhost:3306/matchingengine?createDatabaseIfNotExist=true&serverTimezone=UTC
+#    driverClassName: com.mysql.cj.jdbc.Driver
+#    password: root
+#  jpa:
+#    database-platform: org.hibernate.dialect.MySQL57Dialect
+#    hibernate:
+#      ddl-auto: create
+#      
+
 spring:
-  data:
-    jpa:
-      repositories:
-        enabled: 'true'
   datasource:
     username: root
     url: jdbc:mysql://localhost:3306/matchingengine?createDatabaseIfNotExist=true&serverTimezone=UTC
-    driverClassName: com.mysql.cj.jdbc.Driver
     password: root
+    initialization-mode: always
+  sql:
+    init:
+      mode: always
   jpa:
-    database-platform: org.hibernate.dialect.MySQL57Dialect
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL57Dialect
+    defer-datasource-initialization: 'true'
     hibernate:
       ddl-auto: create
-      
-server:
+    show-sql: 'true'
 
+server:
   port: '8483'
+  
 springdoc:
   swagger-ui:
     path: /doc-swagger.html
