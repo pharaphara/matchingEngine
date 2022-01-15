@@ -41,7 +41,7 @@ spring:
         dialect: org.hibernate.dialect.MySQL57Dialect
     defer-datasource-initialization: 'true'
     hibernate:
-      ddl-auto: create
+      ddl-auto: create-drop
     show-sql: 'true'
 
 server:

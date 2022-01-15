@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Ordre.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">matchingEngine</a> &gt; <a href="index.source.html" class="el_package">fr.eql.matchingEngine.dto.model</a> &gt; <span class="el_source">Ordre.java</span></div><h1>Ordre.java</h1><pre class="source lang-java linenums">package fr.eql.matchingEngine.dto.model;
+
+import java.time.LocalDateTime;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+import fr.eql.matchingEngine.dto.constant.OrderStatus;
+import fr.eql.matchingEngine.dto.constant.OrderType;
+import fr.eql.matchingEngine.dto.constant.TradingPair;
+
+
+@Entity
+public class Ordre {
+	
+	@Id
+	@GeneratedValue (strategy=GenerationType.IDENTITY)
+	private int id;
+	
+
+	/**
+     * user email
+	 */
+	private String user;
+	
+	/**
+	 * BASE/COUNTER, ex : BTC/USD, ETH/EUR
+	 */
+	 @Enumerated(EnumType.STRING)
+	private TradingPair currencyPair;
+	
+	 /**
+      * BID=Buying order (the trader is providing the counter currency)
+	  * ASK=Selling order (the trader is providing the base currency)
+	  */
+	
+    @Enumerated(EnumType.STRING)
+	private OrderType orderType ; 
+	
+	/**
+     * amount in base currency
+	 */
+	private double amount;
+	
+	/**
+     * amount in base currency
+	 */
+	private double filledamount;
+	
+	/**
+     * desired price in counter currency for 1 unit of base currency
+     */
+	private double limitPrice;
+	
+	 /**
+	   * Weighted Average price of the fills in the order
+	   */
+	 @Column(columnDefinition = &quot;double default 0&quot;)
+	  private double averagePrice;
+	
+	/**
+     * order status
+	 */
+	 @Enumerated(EnumType.STRING)
+	private OrderStatus status;
+
+	/**
+     * timestamp of creation date
+	 */
+
+	private LocalDateTime creationDate;
+
+	public Ordre() {
+<span class="nc" id="L79">		super();</span>
+<span class="nc" id="L80">	}</span>
+
+	public Ordre(int id, String user, TradingPair currencyPair, OrderType orderType, double amount, double filledamount,
+			double limitPrice, double averagePrice, OrderStatus status, LocalDateTime creationDate) {
+<span class="nc" id="L84">		super();</span>
+<span class="nc" id="L85">		this.id = id;</span>
+<span class="nc" id="L86">		this.user = user;</span>
+<span class="nc" id="L87">		this.currencyPair = currencyPair;</span>
+<span class="nc" id="L88">		this.orderType = orderType;</span>
+<span class="nc" id="L89">		this.amount = amount;</span>
+<span class="nc" id="L90">		this.filledamount = filledamount;</span>
+<span class="nc" id="L91">		this.limitPrice = limitPrice;</span>
+<span class="nc" id="L92">		this.averagePrice = averagePrice;</span>
+<span class="nc" id="L93">		this.status = status;</span>
+<span class="nc" id="L94">		this.creationDate = creationDate;</span>
+<span class="nc" id="L95">	}</span>
+
+	public int getId() {
+<span class="nc" id="L98">		return id;</span>
+	}
+
+	public void setId(int id) {
+<span class="nc" id="L102">		this.id = id;</span>
+<span class="nc" id="L103">	}</span>
+
+	public String getUser() {
+<span class="nc" id="L106">		return user;</span>
+	}
+
+	public void setUser(String user) {
+<span class="nc" id="L110">		this.user = user;</span>
+<span class="nc" id="L111">	}</span>
+
+	public TradingPair getCurrencyPair() {
+<span class="nc" id="L114">		return currencyPair;</span>
+	}
+
+	public void setCurrencyPair(TradingPair currencyPair) {
+<span class="nc" id="L118">		this.currencyPair = currencyPair;</span>
+<span class="nc" id="L119">	}</span>
+
+	public OrderType getOrderType() {
+<span class="nc" id="L122">		return orderType;</span>
+	}
+
+	public void setOrderType(OrderType orderType) {
+<span class="nc" id="L126">		this.orderType = orderType;</span>
+<span class="nc" id="L127">	}</span>
+
+	public double getAmount() {
+<span class="nc" id="L130">		return amount;</span>
+	}
+
+	public void setAmount(double amount) {
+<span class="nc" id="L134">		this.amount = amount;</span>
+<span class="nc" id="L135">	}</span>
+
+	public double getFilledamount() {
+<span class="nc" id="L138">		return filledamount;</span>
+	}
+
+	public void setFilledamount(double filledamount) {
+<span class="nc" id="L142">		this.filledamount = filledamount;</span>
+<span class="nc" id="L143">	}</span>
+
+	public double getLimitPrice() {
+<span class="nc" id="L146">		return limitPrice;</span>
+	}
+
+	public void setLimitPrice(double limitPrice) {
+<span class="nc" id="L150">		this.limitPrice = limitPrice;</span>
+<span class="nc" id="L151">	}</span>
+
+	public double getAveragePrice() {
+<span class="nc" id="L154">		return averagePrice;</span>
+	}
+
+	public void setAveragePrice(double averagePrice) {
+<span class="nc" id="L158">		this.averagePrice = averagePrice;</span>
+<span class="nc" id="L159">	}</span>
+
+	public OrderStatus getStatus() {
+<span class="nc" id="L162">		return status;</span>
+	}
+
+	public void setStatus(OrderStatus status) {
+<span class="nc" id="L166">		this.status = status;</span>
+<span class="nc" id="L167">	}</span>
+
+	public LocalDateTime getCreationDate() {
+<span class="nc" id="L170">		return creationDate;</span>
+	}
+
+	public void setCreationDate(LocalDateTime creationDate) {
+<span class="nc" id="L174">		this.creationDate = creationDate;</span>
+<span class="nc" id="L175">	}</span>
+
+	@Override
+	public String toString() {
+<span class="nc" id="L179">		return &quot;Ordre [id=&quot; + id + &quot;, user=&quot; + user + &quot;, currencyPair=&quot; + currencyPair + &quot;, orderType=&quot; + orderType</span>
+				+ &quot;, amount=&quot; + amount + &quot;, filledamount=&quot; + filledamount + &quot;, limitPrice=&quot; + limitPrice
+				+ &quot;, averagePrice=&quot; + averagePrice + &quot;, status=&quot; + status + &quot;, creationDate=&quot; + creationDate + &quot;]&quot;;
+	}
+	
+	
+
+	
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
