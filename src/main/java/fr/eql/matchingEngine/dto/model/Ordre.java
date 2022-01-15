@@ -2,6 +2,7 @@ package fr.eql.matchingEngine.dto.model;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -57,6 +58,12 @@ public class Ordre {
 	private double limitPrice;
 	
 	/**
+	   * Weighted Average price of the fills in the order
+	   */
+	 @Column(columnDefinition = "double default 0")
+	  private double averagePrice;
+	
+	/**
      * order status
 	 */
 	 @Enumerated(EnumType.STRING)
@@ -74,8 +81,10 @@ public class Ordre {
 		super();
 	}
 
+
+
 	public Ordre(int id, String user, TradingPair currencyPair, OrderType orderType, double amount, double filledamount,
-			double limitPrice, OrderStatus status, LocalDateTime creationDate) {
+			double limitPrice, double averagePrice, OrderStatus status, LocalDateTime creationDate) {
 		super();
 		this.id = id;
 		this.user = user;
@@ -84,92 +93,138 @@ public class Ordre {
 		this.amount = amount;
 		this.filledamount = filledamount;
 		this.limitPrice = limitPrice;
+		this.averagePrice = averagePrice;
 		this.status = status;
 		this.creationDate = creationDate;
 	}
+
+
 
 	public int getId() {
 		return id;
 	}
 
+
+
 	public void setId(int id) {
 		this.id = id;
 	}
+
+
 
 	public String getUser() {
 		return user;
 	}
 
+
+
 	public void setUser(String user) {
 		this.user = user;
 	}
+
+
 
 	public TradingPair getCurrencyPair() {
 		return currencyPair;
 	}
 
+
+
 	public void setCurrencyPair(TradingPair currencyPair) {
 		this.currencyPair = currencyPair;
 	}
+
+
 
 	public OrderType getOrderType() {
 		return orderType;
 	}
 
+
+
 	public void setOrderType(OrderType orderType) {
 		this.orderType = orderType;
 	}
+
+
 
 	public double getAmount() {
 		return amount;
 	}
 
+
+
 	public void setAmount(double amount) {
 		this.amount = amount;
 	}
+
+
 
 	public double getFilledamount() {
 		return filledamount;
 	}
 
+
+
 	public void setFilledamount(double filledamount) {
 		this.filledamount = filledamount;
 	}
+
+
 
 	public double getLimitPrice() {
 		return limitPrice;
 	}
 
+
+
 	public void setLimitPrice(double limitPrice) {
 		this.limitPrice = limitPrice;
 	}
+
+
+
+	public double getAveragePrice() {
+		return averagePrice;
+	}
+
+
+
+	public void setAveragePrice(double averagePrice) {
+		this.averagePrice = averagePrice;
+	}
+
+
 
 	public OrderStatus getStatus() {
 		return status;
 	}
 
+
+
 	public void setStatus(OrderStatus status) {
 		this.status = status;
 	}
+
+
 
 	public LocalDateTime getCreationDate() {
 		return creationDate;
 	}
 
+
+
 	public void setCreationDate(LocalDateTime creationDate) {
 		this.creationDate = creationDate;
 	}
 
+
+
 	@Override
 	public String toString() {
 		return "Ordre [id=" + id + ", user=" + user + ", currencyPair=" + currencyPair + ", orderType=" + orderType
-				+ ", amount=" + amount + ", filledamount=" + filledamount + ", limitPrice=" + limitPrice + ", status="
-				+ status + ", creationDate=" + creationDate + "]";
+				+ ", amount=" + amount + ", filledamount=" + filledamount + ", limitPrice=" + limitPrice
+				+ ", averagePrice=" + averagePrice + ", status=" + status + ", creationDate=" + creationDate + "]";
 	}
-
-	
-	
-	
-	
-
 }
+	

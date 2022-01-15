@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OrderDTO.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">matchingEngine</a> &gt; <a href="index.source.html" class="el_package">fr.eql.matchingEngine.dto.model</a> &gt; <span class="el_source">OrderDTO.java</span></div><h1>OrderDTO.java</h1><pre class="source lang-java linenums">package fr.eql.matchingEngine.dto.model;
+
+import fr.eql.matchingEngine.dto.constant.OrderType;
+import fr.eql.matchingEngine.dto.constant.TradingPair;
+
+public class OrderDTO {
+	
+	/**
+     * user email
+	 */
+	private String user;
+	
+	/**
+	 * BASE/COUNTER, ex : BTC/USD, ETH/EUR
+	 */
+	private TradingPair currencyPair;
+	
+	 /**
+      * BID=Buying order (the trader is providing the counter currency)
+	  * ASK=Selling order (the trader is providing the base currency)
+	  */
+	private OrderType orderType; 
+	
+	/**
+     * amount in base currency
+	 */
+	private float amount;
+	
+	/**
+     * desired price in counter currency for 1 unit of base currency
+	 */
+	private float limitPrice;
+
+	public OrderDTO() {
+<span class="nc" id="L35">		super();</span>
+<span class="nc" id="L36">	}</span>
+
+	public OrderDTO(String user, TradingPair currencyPair, OrderType orderType, float amount, float limitPrice) {
+<span class="nc" id="L39">		super();</span>
+<span class="nc" id="L40">		this.user = user;</span>
+<span class="nc" id="L41">		this.currencyPair = currencyPair;</span>
+<span class="nc" id="L42">		this.orderType = orderType;</span>
+<span class="nc" id="L43">		this.amount = amount;</span>
+<span class="nc" id="L44">		this.limitPrice = limitPrice;</span>
+<span class="nc" id="L45">	}</span>
+
+	public String getUser() {
+<span class="nc" id="L48">		return user;</span>
+	}
+
+	public void setUser(String user) {
+<span class="nc" id="L52">		this.user = user;</span>
+<span class="nc" id="L53">	}</span>
+
+	public TradingPair getCurrencyPair() {
+<span class="nc" id="L56">		return currencyPair;</span>
+	}
+
+	public void setCurrencyPair(TradingPair currencyPair) {
+<span class="nc" id="L60">		this.currencyPair = currencyPair;</span>
+<span class="nc" id="L61">	}</span>
+
+	public OrderType getOrderType() {
+<span class="nc" id="L64">		return orderType;</span>
+	}
+
+	public void setOrderType(OrderType orderType) {
+<span class="nc" id="L68">		this.orderType = orderType;</span>
+<span class="nc" id="L69">	}</span>
+
+	public float getAmount() {
+<span class="nc" id="L72">		return amount;</span>
+	}
+
+	public void setAmount(float amount) {
+<span class="nc" id="L76">		this.amount = amount;</span>
+<span class="nc" id="L77">	}</span>
+
+	public float getLimitPrice() {
+<span class="nc" id="L80">		return limitPrice;</span>
+	}
+
+	public void setLimitPrice(float limitPrice) {
+<span class="nc" id="L84">		this.limitPrice = limitPrice;</span>
+<span class="nc" id="L85">	}</span>
+
+	@Override
+	public String toString() {
+<span class="nc" id="L89">		return &quot;OrderDTO [user=&quot; + user + &quot;, currencyPair=&quot; + currencyPair + &quot;, orderType=&quot; + orderType + &quot;, amount=&quot;</span>
+				+ amount + &quot;, limitPrice=&quot; + limitPrice + &quot;]&quot;;
+	}
+	
+	
+}
+
+	
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

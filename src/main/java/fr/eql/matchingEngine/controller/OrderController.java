@@ -34,11 +34,9 @@ public class OrderController {
 	}
 	
 	@PostMapping("/order")
-	public ResponseEntity<?> newOrder(@RequestBody OrderDTO orderdto){
+	public ResponseEntity<?> newOrder(@RequestBody Ordre newOrder){
 		
-		Ordre newOrder = new Ordre();
 		
-		BeanUtils.copyProperties(orderdto, newOrder);
 		
 		
 		return orderServices.newOrder(newOrder);
