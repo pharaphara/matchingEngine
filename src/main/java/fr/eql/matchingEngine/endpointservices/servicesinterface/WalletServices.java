@@ -6,8 +6,6 @@ import fr.eql.matchingEngine.dto.model.Ordre;
 
 public interface WalletServices {
 
-	void updateWallets(List<Ordre> orderList);
-
-	void updateWallets(Ordre bID);
+	void sendPayment(Ordre ordre);
 
 }

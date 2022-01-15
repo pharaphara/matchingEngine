@@ -65,7 +65,7 @@ public class MatchinServiceImpl implements MatchingService {
 		bidBooks.forEach((pair,book)->{
 			if(book.size()>0) {
 				System.out.println("Pair  :"+pair);
-				book.forEach(ordre->System.out.println("BUY"+" "+ordre.getLimitPrice()+" -"+ordre.getId()));
+				book.forEach(ordre->System.out.println("BUY"+" "+ordre.getLimitPrice()+" -"+(ordre.getAmount()-ordre.getFilledamount())));
 			}
 
 		});
@@ -73,7 +73,7 @@ public class MatchinServiceImpl implements MatchingService {
 		askBooks.forEach((pair,book)->{
 			if(book.size()>0) {
 
-				book.forEach(ordre->System.out.println("SEL"+" "+ordre.getLimitPrice()+" -"+ordre.getId()));
+				book.forEach(ordre->System.out.println("SEL"+" "+ordre.getLimitPrice()+" -"+(ordre.getAmount()-ordre.getFilledamount())));
 			}
 
 		});
@@ -104,35 +104,43 @@ public class MatchinServiceImpl implements MatchingService {
 	}
 
 	private void fullfillOrders(Ordre BID, Ordre ASK) {
-		if (BID.getAmount()>=ASK.getAmount()) {
-			BID.setFilledamount(BID.getFilledamount()+ASK.getAmount());
+		//oldest order set the trade price
+		double tradePrice= (BID.getCreationDate().isBefore(ASK.getCreationDate()))? BID.getLimitPrice():ASK.getLimitPrice() ;
+		if (BID.getAmount()-BID.getFilledamount()>=ASK.getAmount()-ASK.getFilledamount()) {
+			
+			
+			
+			BID.setAveragePrice(BID.getAveragePrice()+tradePrice/BID.getAmount()*ASK.leftamount());
+			ASK.setAveragePrice(ASK.getAveragePrice()+tradePrice/ASK.getAmount()/ASK.leftamount());
+			BID.setFilledamount(BID.getFilledamount()+ASK.getAmount()-ASK.getFilledamount());
 			ASK.setFilledamount(ASK.getAmount());
 			ASK.setStatus(OrderStatus.FILLED);
-			walletServices.updateWallets(ASK);
+			walletServices.sendPayment(ASK);
 			if (BID.getAmount()==BID.getFilledamount()) {
 				BID.setStatus(OrderStatus.FILLED);
-				walletServices.updateWallets(BID);
+				walletServices.sendPayment(BID);
 			}else {
 				BID.setStatus(OrderStatus.PARTIALLY_FILLED);
-				
+
 			}
 
 		}else {
+			
+			ASK.setAveragePrice(ASK.getAveragePrice()+tradePrice/ASK.getAmount()*BID.leftamount());
+			BID.setAveragePrice(BID.getAveragePrice()+tradePrice/BID.getAmount()/BID.leftamount());
+			ASK.setFilledamount(ASK.getFilledamount()+BID.getAmount()-BID.getFilledamount());
 			BID.setFilledamount(BID.getAmount());
-			ASK.setFilledamount(ASK.getFilledamount()+BID.getAmount());
 			BID.setStatus(OrderStatus.FILLED);
-			walletServices.updateWallets(BID);
+			walletServices.sendPayment(BID);
 			if (ASK.getAmount()==ASK.getFilledamount()) {
 				ASK.setStatus(OrderStatus.FILLED);
-				walletServices.updateWallets(ASK);
+				walletServices.sendPayment(ASK);
 			}else {
 				ASK.setStatus(OrderStatus.PARTIALLY_FILLED);
-				
+
 			}
 		}
-
 		orderRepository.saveAll(Arrays.asList(BID,ASK));
-		
 		
 		init();
 
