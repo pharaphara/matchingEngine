@@ -217,6 +217,10 @@ public class Ordre {
 	public void setCreationDate(LocalDateTime creationDate) {
 		this.creationDate = creationDate;
 	}
+	
+	public double leftamount() {
+		return amount-filledamount;
+	}
 
 
 

@@ -1,74 +1,79 @@
 package fr.eql.matchingEngine.endpointservices.servicesimpl;
 
+import java.net.URI;
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import fr.eql.matchingEngine.dao.PaymentRepo;
+import fr.eql.matchingEngine.dto.constant.OrderType;
 import fr.eql.matchingEngine.dto.model.Ordre;
+import fr.eql.matchingEngine.dto.model.Payment;
 import fr.eql.matchingEngine.dto.model.PaymentDto;
 import fr.eql.matchingEngine.endpointservices.servicesinterface.WalletServices;
 
 @Service
 public class WalletServicesImpl implements WalletServices {
 
+	
+
 	@Autowired
 	private WebClient.Builder webClientBuilder;
-	
-	
+
+	@Autowired
+	private PaymentRepo paymentRepo;
+
+
 	@Override
-	public void updateWallets(List<Ordre> orderList) {
-		orderList.forEach(order->{
-			
-//			ResponseEntity<String>  response = webClientBuilder.build()
-//					.post()
-//					.uri(url+"exchangeinstance/")
-//					.cookie("NSC_mc_wtsw_qse-hftuw3", "ffffffff0949aa2f45525d5f4f58455e445a4a4216cb")//needed to send all request to the same node
-//					.bodyValue(filters)
-//					.accept(MediaType.APPLICATION_JSON)
-//					.headers(header -> header.setBearerAuth(tokenService.getToken()))
-//					.retrieve()
-//					.toEntity(String.class)
-//					.retry(3)
-//					.block();
-//
-//			return response;
-			
-		});
+	public void sendPayment(Ordre ordre) {
+		//BTC_EUR : BTC=BASE ,  EUR=COUNTER
+
+		String[] tickerTab = ordre.getCurrencyPair().name().split("_");
+
+
+
+		Payment basePayement = new Payment(tickerTab[0], ordre.getUser(), ordre.getAmount(),ordre);
+		Payment counterPayement = new Payment(tickerTab[1], ordre.getUser(), ordre.getAmount()*ordre.getAveragePrice(),ordre);
+
+		if (ordre.getOrderType().equals(OrderType.BID)) {
+			basePayement.setMontant(basePayement.getMontant()*-1);
+		}else {
+			counterPayement.setMontant(counterPayement.getMontant()*-1);
+		}
+
+		paymentRepo.save(basePayement);
+		paymentRepo.save(counterPayement);
+
+
+
+		postPayload(basePayement);
+		postPayload(basePayement);
+
 
 	}
 
 
-	@Override
-	public void updateWallets(Ordre order) {
+	private void postPayload(Payment payment) {
+
+		PaymentDto payementDto = new PaymentDto();
+
+		BeanUtils.copyProperties(payment, payementDto);
+
+		ResponseEntity<String>  response = webClientBuilder.build()
+				.post()
+				.uri("http://headers.jsontest.com/")
+				.bodyValue(payementDto)
+				.headers(header -> header.setContentType(MediaType.APPLICATION_JSON))
+				.retrieve()
+				.toEntity(String.class)
+				.retry(3)
+				.block();
 		
-		String[] tickerTab = order.getCurrencyPair().name().split("_");
-		
-		double counterAmmount= order.getAmount()*order.getLimitPrice();
-		
-		PaymentDto basePay = new PaymentDto(tickerTab[0], null, 0);
-		PaymentDto counterPay = new PaymentDto(tickerTab[1], null, 0);
-//		
-//		 postPayload(payment1);
-//		 postPayload(payment2);
-		 
-		
+		System.out.println(response.getBody());
 	}
-
-
-//	private void postPayload() {
-//		ResponseEntity<String>  response = webClientBuilder.build()
-//				.post()
-//				.uri(url+"exchangeinstance/")
-//				.cookie("NSC_mc_wtsw_qse-hftuw3", "ffffffff0949aa2f45525d5f4f58455e445a4a4216cb")//needed to send all request to the same node
-//				.bodyValue(filters)
-//				.accept(MediaType.APPLICATION_JSON)
-//				.headers(header -> header.setBearerAuth(tokenService.getToken()))
-//				.retrieve()
-//				.toEntity(String.class)
-//				.retry(3)
-//				.block();
-//	}
-
 }

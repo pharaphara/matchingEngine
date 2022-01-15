@@ -14,6 +14,10 @@ public class PaymentDto {
 		this.montant = montant;
 	}
 	
+	public PaymentDto() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public String getCurrencyTicker() {
 		return currencyTicker;
 	}
