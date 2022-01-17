@@ -1,6 +1,6 @@
 package fr.eql.matchingEngine.services.servicesinterface;
 
-import fr.eql.matchingEngine.dto.model.Ordre;
+import fr.eql.matchingEngine.dto.entity.Ordre;
 
 public interface MatchingService {
 	

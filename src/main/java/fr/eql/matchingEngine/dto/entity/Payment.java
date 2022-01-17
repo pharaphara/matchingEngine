@@ -1,4 +1,4 @@
-package fr.eql.matchingEngine.dto.model;
+package fr.eql.matchingEngine.dto.entity;
 
 import java.time.LocalDateTime;
 
