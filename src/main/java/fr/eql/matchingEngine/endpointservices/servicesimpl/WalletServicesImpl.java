@@ -1,38 +1,24 @@
 package fr.eql.matchingEngine.endpointservices.servicesimpl;
 
-import java.net.URI;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import javax.annotation.PostConstruct;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import fr.eql.matchingEngine.dao.PaymentRepo;
-import fr.eql.matchingEngine.dao.PriceRepo;
 import fr.eql.matchingEngine.dto.constant.OrderType;
-import fr.eql.matchingEngine.dto.constant.TradingPair;
-import fr.eql.matchingEngine.dto.model.Ordre;
-import fr.eql.matchingEngine.dto.model.Payment;
+import fr.eql.matchingEngine.dto.entity.Ordre;
+import fr.eql.matchingEngine.dto.entity.Payment;
 import fr.eql.matchingEngine.dto.model.PaymentDto;
-import fr.eql.matchingEngine.dto.model.Price;
+import fr.eql.matchingEngine.dto.model.PriceDto;
 import fr.eql.matchingEngine.endpointservices.servicesinterface.WalletServices;
-import reactor.core.CoreSubscriber;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
+import fr.eql.matchingEngine.services.servicesinterface.PriceServices;
 
 @Service
 public class WalletServicesImpl implements WalletServices {
@@ -46,7 +32,7 @@ public class WalletServicesImpl implements WalletServices {
 	private PaymentRepo paymentRepo;
 	
 	@Autowired
-	PriceRepo priceRepo;
+	private PriceServices priceServices;	
 	
 	@Value("${services.walletApi}")
 	private String url ;
@@ -60,8 +46,7 @@ public class WalletServicesImpl implements WalletServices {
 	@Override
 	public void sendPayment(Ordre ordre) {
 		
-		Price lastPrice = new Price(ordre);
-		priceRepo.save(lastPrice);
+		priceServices.setLastPrice(new PriceDto(ordre));
 		
 		//BTC_EUR : BTC=BASE ,  EUR=COUNTER
 

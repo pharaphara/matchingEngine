@@ -1,6 +1,7 @@
-package fr.eql.matchingEngine.dto.model;
+package fr.eql.matchingEngine.dto.entity;
 
 import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -265,6 +266,10 @@ public class Ordre {
 				+ ", averagePrice=" + averagePrice + ", status=" + status + ", creationDate=" + creationDate
 				+ ", filledDate=" + filledDate + "]";
 	}
+
+
+
+	
 
 
 

@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 
 import fr.eql.matchingEngine.dao.OrderRepository;
 import fr.eql.matchingEngine.dto.constant.OrderStatus;
+import fr.eql.matchingEngine.dto.entity.Ordre;
 import fr.eql.matchingEngine.dto.model.OrderDTO;
-import fr.eql.matchingEngine.dto.model.Ordre;
 import fr.eql.matchingEngine.services.servicesinterface.MatchingService;
 import fr.eql.matchingEngine.services.servicesinterface.OrderServices;
 

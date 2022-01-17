@@ -1,5 +1,6 @@
 package fr.eql.matchingEngine.services.servicesimpl;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -16,7 +17,7 @@ import fr.eql.matchingEngine.dao.OrderRepository;
 import fr.eql.matchingEngine.dto.constant.OrderStatus;
 import fr.eql.matchingEngine.dto.constant.OrderType;
 import fr.eql.matchingEngine.dto.constant.TradingPair;
-import fr.eql.matchingEngine.dto.model.Ordre;
+import fr.eql.matchingEngine.dto.entity.Ordre;
 import fr.eql.matchingEngine.endpointservices.servicesinterface.WalletServices;
 import fr.eql.matchingEngine.services.servicesinterface.MatchingService;
 
@@ -93,61 +94,48 @@ public class MatchinServiceImpl implements MatchingService {
 			if(book.size()>0&&askBooks.get(pair).size()>0) {
 				Ordre lowestBID =book.getLast();
 				Ordre lowestASK = askBooks.get(pair).getFirst();
+				Ordre highestLeftAmmount = (lowestBID.getAmount()-lowestBID.getFilledamount()>=lowestASK.getAmount()-lowestASK.getFilledamount()) ? lowestBID: lowestASK ;
+				Ordre lowestLeftAmmount = (lowestBID.getAmount()-lowestBID.getFilledamount()>=lowestASK.getAmount()-lowestASK.getFilledamount()) ? lowestASK: lowestBID ;
+
+
 
 
 				if(lowestBID.getLimitPrice()>=lowestASK.getLimitPrice()) {
-					fullfillOrders(lowestBID,lowestASK);
+					fullfillOrders(highestLeftAmmount,lowestLeftAmmount);
 					matchOrders();//recursivelly match all possible orders
 				}
 			}
 		});
 	}
 
-	private void fullfillOrders(Ordre BID, Ordre ASK) {
+	private void fullfillOrders(Ordre HIGH, Ordre LOW) {
 		//oldest order set the trade price
-		double tradePrice= (BID.getCreationDate().isBefore(ASK.getCreationDate()))? BID.getLimitPrice():ASK.getLimitPrice() ;
-		if (BID.getAmount()-BID.getFilledamount()>=ASK.getAmount()-ASK.getFilledamount()) {
-			
-			
-			
-			BID.setAveragePrice(BID.getAveragePrice()+tradePrice/BID.getAmount()*ASK.leftamount());
-			ASK.setAveragePrice(ASK.getAveragePrice()+tradePrice/ASK.getAmount()/ASK.leftamount());
-			BID.setFilledamount(BID.getFilledamount()+ASK.getAmount()-ASK.getFilledamount());
-			ASK.setFilledamount(ASK.getAmount());
-			ASK.setStatus(OrderStatus.FILLED);
-			walletServices.sendPayment(ASK);
-			if (BID.getAmount()==BID.getFilledamount()) {
-				BID.setStatus(OrderStatus.FILLED);
-				walletServices.sendPayment(BID);
-			}else {
-				BID.setStatus(OrderStatus.PARTIALLY_FILLED);
+		double tradePrice= (HIGH.getCreationDate().isBefore(LOW.getCreationDate()))? HIGH.getLimitPrice():LOW.getLimitPrice() ;
 
-			}
-
+		HIGH.setAveragePrice(HIGH.getAveragePrice()+tradePrice/HIGH.getAmount()*LOW.leftamount());
+		LOW.setAveragePrice(LOW.getAveragePrice()+tradePrice/LOW.getAmount()*LOW.leftamount());
+		HIGH.setFilledamount(HIGH.getFilledamount()+LOW.leftamount());
+		LOW.setFilledamount(LOW.getAmount());
+		LOW.setStatus(OrderStatus.FILLED);
+		LOW.setFilledDate(LocalDateTime.now());
+		walletServices.sendPayment(LOW);
+		if (HIGH.getAmount()==HIGH.getFilledamount()) {
+			HIGH.setStatus(OrderStatus.FILLED);
+			HIGH.setFilledDate(LocalDateTime.now());
+			walletServices.sendPayment(HIGH);
 		}else {
-			
-			ASK.setAveragePrice(ASK.getAveragePrice()+tradePrice/ASK.getAmount()*BID.leftamount());
-			BID.setAveragePrice(BID.getAveragePrice()+tradePrice/BID.getAmount()/BID.leftamount());
-			ASK.setFilledamount(ASK.getFilledamount()+BID.getAmount()-BID.getFilledamount());
-			BID.setFilledamount(BID.getAmount());
-			BID.setStatus(OrderStatus.FILLED);
-			walletServices.sendPayment(BID);
-			if (ASK.getAmount()==ASK.getFilledamount()) {
-				ASK.setStatus(OrderStatus.FILLED);
-				walletServices.sendPayment(ASK);
-			}else {
-				ASK.setStatus(OrderStatus.PARTIALLY_FILLED);
-
-			}
+			HIGH.setStatus(OrderStatus.PARTIALLY_FILLED);
 		}
-		orderRepository.saveAll(Arrays.asList(BID,ASK));
-		
+
+
+		orderRepository.saveAll(Arrays.asList(HIGH,LOW));
+
 		init();
 
 
 
 	}
-
+	
 
 
 }
