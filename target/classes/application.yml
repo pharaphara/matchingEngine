@@ -10,21 +10,7 @@ project:
     name: match
     wiki: https://www.google.fr
     
-#spring:
-#  data:
-#    jpa:
-#      repositories:
-#        enabled: 'true'
-#  datasource:
-#    username: root
-#    url: jdbc:mysql://localhost:3306/matchingengine?createDatabaseIfNotExist=true&serverTimezone=UTC
-#    driverClassName: com.mysql.cj.jdbc.Driver
-#    password: root
-#  jpa:
-#    database-platform: org.hibernate.dialect.MySQL57Dialect
-#    hibernate:
-#      ddl-auto: create
-#      
+
 
 spring:
   datasource:
@@ -50,6 +36,9 @@ server:
 springdoc:
   swagger-ui:
     path: /doc-swagger.html
+    
+services:
+  walletApi: localhost:9090/assets-api-rest/sendPayment
 
     
 
