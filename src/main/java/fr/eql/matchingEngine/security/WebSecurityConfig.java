@@ -27,15 +27,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	@Override
     protected void configure(HttpSecurity http) throws Exception {
 		//log.info("username {}, ",username);
-        
-		http.sessionManagement().sessionCreationPolicy(
-                SessionCreationPolicy.STATELESS)
-		.and()
-        .authorizeRequests()
-        .antMatchers("/**").authenticated() // These urls are allowed by any authenticated user
-        .and()
-        .httpBasic();
-        http.csrf().disable();
+		http
+	    .authorizeRequests()
+	    .antMatchers("/**").permitAll()
+	    .anyRequest().authenticated();
+//        
+//		http.sessionManagement().sessionCreationPolicy(
+//                SessionCreationPolicy.STATELESS)
+//		.and()
+//        .authorizeRequests()
+//        .antMatchers("/**").authenticated() // These urls are allowed by any authenticated user
+//        .and()
+//        .httpBasic();
+//        http.csrf().disable();
     }
 
 	@Bean
