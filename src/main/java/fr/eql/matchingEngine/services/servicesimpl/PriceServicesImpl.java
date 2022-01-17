@@ -79,6 +79,7 @@ public class PriceServicesImpl  implements PriceServices{
 	@Override
 	public List<Double[]> getLastCandles(TradingPair pair, Interval interval, int nb) {
 		List<PriceDto> prices=getPricesBetween(pair, LocalDateTime.now().minusHours(1), LocalDateTime.now());
+		
 		return null;
 	}
 
