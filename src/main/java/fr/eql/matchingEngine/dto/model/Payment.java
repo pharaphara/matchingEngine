@@ -1,5 +1,7 @@
 package fr.eql.matchingEngine.dto.model;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,6 +20,8 @@ public class Payment {
 	private String currencyTicker;
 	private String userEmail;
 	private double montant;
+	private LocalDateTime timestamp;
+	private boolean isSent;
 	
 	@ManyToOne ()
 	@JoinColumn(name = "ordre_id")
@@ -28,14 +32,17 @@ public class Payment {
 		super();
 	}
 
+	
 
-	public Payment(String currencyTicker, String userEmail, double montant, Ordre ordre) {
+	public Payment(String currencyTicker, String userEmail, double montant, LocalDateTime timestamp, Ordre ordre) {
 		super();
 		this.currencyTicker = currencyTicker;
 		this.userEmail = userEmail;
 		this.montant = montant;
+		this.timestamp = timestamp;
 		this.ordre = ordre;
 	}
+
 
 
 	public int getId() {
@@ -43,9 +50,11 @@ public class Payment {
 	}
 
 
+
 	public void setId(int id) {
 		this.id = id;
 	}
+
 
 
 	public String getCurrencyTicker() {
@@ -53,9 +62,11 @@ public class Payment {
 	}
 
 
+
 	public void setCurrencyTicker(String currencyTicker) {
 		this.currencyTicker = currencyTicker;
 	}
+
 
 
 	public String getUserEmail() {
@@ -63,9 +74,11 @@ public class Payment {
 	}
 
 
+
 	public void setUserEmail(String userEmail) {
 		this.userEmail = userEmail;
 	}
+
 
 
 	public double getMontant() {
@@ -73,9 +86,23 @@ public class Payment {
 	}
 
 
+
 	public void setMontant(double montant) {
 		this.montant = montant;
 	}
+
+
+
+	public LocalDateTime getTimestamp() {
+		return timestamp;
+	}
+
+
+
+	public void setTimestamp(LocalDateTime timestamp) {
+		this.timestamp = timestamp;
+	}
+
 
 
 	public Ordre getOrdre() {
@@ -83,8 +110,31 @@ public class Payment {
 	}
 
 
+
 	public void setOrdre(Ordre ordre) {
 		this.ordre = ordre;
 	}
+
+
+
+	public boolean isSent() {
+		return isSent;
+	}
+
+
+
+	public void setSent(boolean isSent) {
+		this.isSent = isSent;
+	}
+
+
+
+	@Override
+	public String toString() {
+		return "Payment [id=" + id + ", currencyTicker=" + currencyTicker + ", userEmail=" + userEmail + ", montant="
+				+ montant + ", timestamp=" + timestamp + ", ordre=" + ordre + "]";
+	}
+
+
 	
 }

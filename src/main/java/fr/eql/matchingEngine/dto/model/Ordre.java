@@ -75,6 +75,8 @@ public class Ordre {
 
 	private LocalDateTime creationDate;
 	
+	private LocalDateTime filledDate;
+	
 	
 
 	public Ordre() {
@@ -96,6 +98,26 @@ public class Ordre {
 		this.averagePrice = averagePrice;
 		this.status = status;
 		this.creationDate = creationDate;
+	}
+	
+	
+
+
+
+	public Ordre(String user, TradingPair currencyPair, OrderType orderType, double amount, double filledamount,
+			double limitPrice, double averagePrice, OrderStatus status, LocalDateTime creationDate,
+			LocalDateTime filledDate) {
+		super();
+		this.user = user;
+		this.currencyPair = currencyPair;
+		this.orderType = orderType;
+		this.amount = amount;
+		this.filledamount = filledamount;
+		this.limitPrice = limitPrice;
+		this.averagePrice = averagePrice;
+		this.status = status;
+		this.creationDate = creationDate;
+		this.filledDate = filledDate;
 	}
 
 
@@ -224,11 +246,28 @@ public class Ordre {
 
 
 
+	public LocalDateTime getFilledDate() {
+		return filledDate;
+	}
+
+
+
+	public void setFilledDate(LocalDateTime filledDate) {
+		this.filledDate = filledDate;
+	}
+
+
+
 	@Override
 	public String toString() {
 		return "Ordre [id=" + id + ", user=" + user + ", currencyPair=" + currencyPair + ", orderType=" + orderType
 				+ ", amount=" + amount + ", filledamount=" + filledamount + ", limitPrice=" + limitPrice
-				+ ", averagePrice=" + averagePrice + ", status=" + status + ", creationDate=" + creationDate + "]";
+				+ ", averagePrice=" + averagePrice + ", status=" + status + ", creationDate=" + creationDate
+				+ ", filledDate=" + filledDate + "]";
 	}
+
+
+
+	
 }
 	
