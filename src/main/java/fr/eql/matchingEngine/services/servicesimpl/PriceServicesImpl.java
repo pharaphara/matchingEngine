@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import fr.eql.matchingEngine.dao.OrderRepository;
+import fr.eql.matchingEngine.dto.constant.Interval;
 import fr.eql.matchingEngine.dto.constant.OrderStatus;
 import fr.eql.matchingEngine.dto.constant.TradingPair;
 import fr.eql.matchingEngine.dto.entity.Ordre;
@@ -74,5 +75,14 @@ public class PriceServicesImpl  implements PriceServices{
 	public List<PriceDto> getPricesBetween(PricesRequest request) {
 		return getPricesBetween(request.getPair(), request.getStart(), request.getEnd());
 	}
+
+	@Override
+	public List<Double[]> getLastCandles(TradingPair pair, Interval interval, int nb) {
+		List<PriceDto> prices=getPricesBetween(pair, LocalDateTime.now().minusHours(1), LocalDateTime.now());
+		return null;
+	}
+
+	
+	
 
 }

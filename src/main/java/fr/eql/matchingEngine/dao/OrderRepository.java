@@ -21,7 +21,8 @@ public interface OrderRepository extends JpaRepository<Ordre, Integer>{
 	List<Ordre> findByStatusNotLike(OrderStatus status);
  	List<Ordre> findByStatusIn(List<OrderStatus> list);
  	List<Ordre> findByOrderTypeAndStatusIn(OrderType type, List<OrderStatus> list);
- 	List<Ordre> findByOrderTypeAndStatusInOrderByLimitPrice(OrderType type, List<OrderStatus> list);
+ 	List<Ordre> findByOrderTypeAndStatusInOrderByLimitPriceAscAmountDesc(OrderType type, List<OrderStatus> list);
+ 	List<Ordre> findByOrderTypeAndStatusInOrderByLimitPriceAscAmountAsc(OrderType type, List<OrderStatus> list);
 	List<Ordre> findByUser(String user);
 	Ordre findFirstByCurrencyPairAndStatusOrderByIdAsc(TradingPair pair,OrderStatus status);
 	List<Ordre> findByCurrencyPairAndFilledDateBetweenOrderByFilledDateAsc(TradingPair pair, LocalDateTime start, LocalDateTime end);
