@@ -36,9 +36,9 @@ public class MatchinServiceImpl implements MatchingService {
 	@PostConstruct
 	public void init() {
 
-		List<Ordre> allOpenBid = orderRepository.findByOrderTypeAndStatusInOrderByLimitPrice(OrderType.BID, Arrays.asList(OrderStatus.NEW,OrderStatus.PARTIALLY_FILLED));
+		List<Ordre> allOpenBid = orderRepository.findByOrderTypeAndStatusInOrderByLimitPriceAscAmountAsc(OrderType.BID, Arrays.asList(OrderStatus.NEW,OrderStatus.PARTIALLY_FILLED));
 		System.out.println("open bid size = "+allOpenBid.size());
-		List<Ordre> allOpenAsk = orderRepository.findByOrderTypeAndStatusInOrderByLimitPrice(OrderType.ASK, Arrays.asList(OrderStatus.NEW,OrderStatus.PARTIALLY_FILLED));
+		List<Ordre> allOpenAsk = orderRepository.findByOrderTypeAndStatusInOrderByLimitPriceAscAmountDesc(OrderType.ASK, Arrays.asList(OrderStatus.NEW,OrderStatus.PARTIALLY_FILLED));
 		System.out.println("open ask size = "+allOpenAsk.size());
 
 		//initilizing each book

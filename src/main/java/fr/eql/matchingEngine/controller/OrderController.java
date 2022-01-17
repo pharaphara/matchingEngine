@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import fr.eql.matchingEngine.dao.CurrencyRepo;
 import fr.eql.matchingEngine.dao.OrderRepository;
 import fr.eql.matchingEngine.dao.PaymentRepo;
 import fr.eql.matchingEngine.dto.constant.OrderStatus;
 import fr.eql.matchingEngine.dto.constant.TradingPair;
+import fr.eql.matchingEngine.dto.entity.Currency;
 import fr.eql.matchingEngine.dto.entity.Ordre;
 import fr.eql.matchingEngine.dto.model.OrderDTO;
 import fr.eql.matchingEngine.dto.model.PriceDto;
@@ -40,6 +42,9 @@ public class OrderController {
 
 	@Autowired
 	OrderRepository orderRepository;
+	
+	@Autowired
+	CurrencyRepo currencyRepo;
 
 	@GetMapping("/hello")
 	public String hello(){
@@ -70,5 +75,13 @@ public class OrderController {
 	@GetMapping("/getPrices") 
 	public ResponseEntity<List<PriceDto>> getPrices(@RequestBody PricesRequest request){
 		return new ResponseEntity<List<PriceDto>>(priceServices.getPricesBetween(request), HttpStatus.OK);
+	}
+	
+	@GetMapping("/getCurrency")
+	public ResponseEntity<Currency> getCurrency(@RequestParam String ticker){
+		Currency currency = currencyRepo.findById(ticker).get();
+		currency.setPrice(priceServices.getLastPrice(TradingPair.valueOf(ticker+"_EUR")));
+		
+		return new ResponseEntity<Currency> (currencyRepo.findById(ticker).get(),HttpStatus.OK);
 	}
 }
