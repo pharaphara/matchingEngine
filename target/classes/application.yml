@@ -48,6 +48,9 @@ services:
 spring:
     profiles: dev
 
+app:
+    username: test
+    password: test
 
 
 ---
@@ -55,4 +58,7 @@ spring:
 spring:
     profiles: test
 
+app:
+    username: test
+    password: test
 
