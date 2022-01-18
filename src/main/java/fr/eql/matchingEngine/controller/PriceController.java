@@ -49,7 +49,16 @@ public class PriceController {
 	@GetMapping("/getCurrencies")
 	public ResponseEntity<List<Currency>> getCurrencies(){
 		List<Currency> currencies = currencyRepo.findAll();
-		currencies.forEach(currency -> currency.setPrice(priceServices.getLastPrice(TradingPair.valueOf(currency.getTicker()+"_EUR")).getPrice()));
+		
+		currencies.forEach(currency -> {
+			PriceDto price = priceServices.getLastPrice(TradingPair.valueOf(currency.getTicker()+"_EUR"));
+			if (price!=null) {
+				currency.setPrice(price.getPrice()) ;
+			}
+			
+			
+			
+		});
 		
 		return new ResponseEntity<List<Currency>> (currencies,HttpStatus.OK);
 	}
