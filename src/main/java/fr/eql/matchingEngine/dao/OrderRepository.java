@@ -26,5 +26,5 @@ public interface OrderRepository extends JpaRepository<Ordre, Integer>{
 	List<Ordre> findByUser(String user);
 	Ordre findFirstByCurrencyPairAndStatusOrderByIdAsc(TradingPair pair,OrderStatus status);
 	List<Ordre> findByCurrencyPairAndFilledDateBetweenOrderByFilledDateAsc(TradingPair pair, LocalDateTime start, LocalDateTime end);
-	List<Ordre> findbyCurrencyPair(TradingPair pair);
+	List<Ordre> findByCurrencyPair(TradingPair pair);
 }
