@@ -27,7 +27,7 @@ import fr.eql.matchingEngine.dto.model.PricesRequest;
 import fr.eql.matchingEngine.services.servicesinterface.PriceServices;
 
 @Service
-<span class="nc" id="L30">public class PriceServicesImpl  implements PriceServices{</span>
+<span class="fc" id="L30">public class PriceServicesImpl  implements PriceServices{</span>
 	
 	@Autowired
 	OrderRepository orderRepository;
@@ -37,19 +37,19 @@ import fr.eql.matchingEngine.services.servicesinterface.PriceServices;
 	//when api start look for last prices in database
 	@PostConstruct
 	void onInit() {
-<span class="nc" id="L40">		lastPrices= new HashMap&lt;TradingPair, PriceDto&gt;();</span>
-<span class="nc" id="L41">		Arrays.stream(TradingPair.values()).forEach(pair-&gt;{</span>
-<span class="nc" id="L42">			PriceDto lastPrice = new PriceDto();</span>
-<span class="nc" id="L43">			Ordre ordre = orderRepository.findFirstByCurrencyPairAndStatusOrderByIdAsc(pair, OrderStatus.FILLED);</span>
-<span class="nc bnc" id="L44" title="All 2 branches missed.">			if (ordre!=null) {</span>
+<span class="fc" id="L40">		lastPrices= new HashMap&lt;TradingPair, PriceDto&gt;();</span>
+<span class="fc" id="L41">		Arrays.stream(TradingPair.values()).forEach(pair-&gt;{</span>
+<span class="fc" id="L42">			PriceDto lastPrice = new PriceDto();</span>
+<span class="fc" id="L43">			Ordre ordre = orderRepository.findFirstByCurrencyPairAndStatusOrderByIdAsc(pair, OrderStatus.FILLED);</span>
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">			if (ordre!=null) {</span>
 <span class="nc" id="L45">				BeanUtils.copyProperties(ordre, lastPrice);</span>
 				
 <span class="nc" id="L47">				lastPrices.put(pair, lastPrice);</span>
 			}
 			
 
-<span class="nc" id="L51">		});</span>
-<span class="nc" id="L52">	}</span>
+<span class="fc" id="L51">		});</span>
+<span class="fc" id="L52">	}</span>
 
 	@Override
 	public PriceDto getLastPrice(TradingPair pair) {
