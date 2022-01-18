@@ -34,17 +34,11 @@ public class OrderController {
 	@Autowired
 	OrderServices orderServices;
 
-	@Autowired
-	WalletServices walletServices;
 
-	@Autowired
-	PriceServices priceServices;
 
 	@Autowired
 	OrderRepository orderRepository;
-	
-	@Autowired
-	CurrencyRepo currencyRepo;
+
 
 	@GetMapping("/hello")
 	public String hello(){
@@ -67,21 +61,5 @@ public class OrderController {
 		return new ResponseEntity<List<Ordre>>(orderRepository.findByStatus(status), HttpStatus.OK) ;
 	}
 
-	@GetMapping("/getLastPrice")
-	public ResponseEntity<PriceDto> getLastPrice(@RequestParam TradingPair pair){
-		return new ResponseEntity<PriceDto>(priceServices.getLastPrice(pair), HttpStatus.OK) ;
-	}
 
-	@GetMapping("/getPrices") 
-	public ResponseEntity<List<PriceDto>> getPrices(@RequestBody PricesRequest request){
-		return new ResponseEntity<List<PriceDto>>(priceServices.getPricesBetween(request), HttpStatus.OK);
-	}
-	
-	@GetMapping("/getCurrency")
-	public ResponseEntity<Currency> getCurrency(@RequestParam String ticker){
-		Currency currency = currencyRepo.findById(ticker).get();
-		currency.setPrice(priceServices.getLastPrice(TradingPair.valueOf(ticker+"_EUR")));
-		
-		return new ResponseEntity<Currency> (currencyRepo.findById(ticker).get(),HttpStatus.OK);
-	}
 }
