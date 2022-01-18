@@ -61,6 +61,11 @@ public class OrderController {
 	public ResponseEntity<List<Ordre>> getOrders(@RequestParam TradingPair pair){
 		return new ResponseEntity<List<Ordre>>(orderRepository.findByCurrencyPair(pair), HttpStatus.OK) ;
 	}
+	
+	@GetMapping("/lastOrder")
+	public ResponseEntity<Ordre> getLastOrder(@RequestParam String user){
+		return new ResponseEntity<Ordre>(orderRepository.findFirstByUserOrderByIdAsc(user), HttpStatus.OK) ;
+	}
 
 	@GetMapping("/status")
 	public ResponseEntity<List<Ordre>> getByStatus(@RequestParam OrderStatus status){
