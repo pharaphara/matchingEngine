@@ -1,4 +1,4 @@
-FROM openjdk:11
+FROM openjdk:alpine-slim
 VOLUME [ "/tmp" ]
 ADD matchingEngine-matchingEngine.war app.war
 EXPOSE 8080
