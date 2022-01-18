@@ -57,9 +57,9 @@ public class OrderController {
 		return new ResponseEntity<List<Ordre>>(orderRepository.findByUser(user), HttpStatus.OK) ;
 	}
 	
-	@GetMapping("/myOrders")
+	@GetMapping("/Orders")
 	public ResponseEntity<List<Ordre>> getOrders(@RequestParam TradingPair pair){
-		return new ResponseEntity<List<Ordre>>(orderRepository.findbyCurrencyPair(pair), HttpStatus.OK) ;
+		return new ResponseEntity<List<Ordre>>(orderRepository.findByCurrencyPair(pair), HttpStatus.OK) ;
 	}
 
 	@GetMapping("/status")
