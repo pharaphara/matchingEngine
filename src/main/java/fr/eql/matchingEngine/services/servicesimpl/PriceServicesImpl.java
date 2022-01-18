@@ -39,7 +39,7 @@ public class PriceServicesImpl  implements PriceServices{
 	void onInit() {
 		lastPrices= new HashMap<TradingPair, PriceDto>();
 		Arrays.stream(TradingPair.values()).forEach(pair->{
-			PriceDto lastPrice = new PriceDto();
+			PriceDto lastPrice = new PriceDto(111d, pair, LocalDateTime.now());
 			Ordre ordre = orderRepository.findFirstByCurrencyPairAndStatusOrderByIdAsc(pair, OrderStatus.FILLED);
 			if (ordre!=null) {
 				BeanUtils.copyProperties(ordre, lastPrice);
