@@ -64,8 +64,8 @@ spring:
 
   datasource:
     username: root
-    url: jdbc:mysql://192.168.1.32:3306/JENKINSmatchingengine?createDatabaseIfNotExist=true&serverTimezone=UTC
-    password: root
+    url: jdbc:mysql://192.168.33.20:3306/JENKINSmatchingengine?createDatabaseIfNotExist=true&serverTimezone=UTC
+    password: example
     initialization-mode: always
   sql:
     init:
