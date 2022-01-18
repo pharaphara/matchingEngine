@@ -20,9 +20,9 @@ import fr.eql.matchingEngine.dto.response.Response;
 
 @ControllerAdvice
 
-<span class="nc" id="L23">public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {</span>
+<span class="fc" id="L23">public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {</span>
 
-<span class="nc" id="L25">    Logger LOGGER = LoggerFactory.getLogger(RestResponseEntityExceptionHandler.class);</span>
+<span class="fc" id="L25">    Logger LOGGER = LoggerFactory.getLogger(RestResponseEntityExceptionHandler.class);</span>
 
     @ResponseStatus(value= HttpStatus.NOT_FOUND)
     @ExceptionHandler({HttpClientErrorException.NotFound.class})

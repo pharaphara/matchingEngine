@@ -14,7 +14,7 @@ import org.springframework.web.filter.CorsFilter;
 
 //@PropertySource(value = &quot;file:c:/afcepf/matchingEngine/src/main/resources/application.yml&quot;)
 @SpringBootApplication
-<span class="nc" id="L17">public class MatchingEngineApplication {</span>
+<span class="fc" id="L17">public class MatchingEngineApplication {</span>
 
 	public static void main(String[] args) {
 <span class="nc" id="L20">		SpringApplication.run(MatchingEngineApplication.class, args);</span>
@@ -23,18 +23,18 @@ import org.springframework.web.filter.CorsFilter;
 	
 	@Bean
     public CorsFilter corsFilter() {
-<span class="nc" id="L26">        CorsConfiguration corsConfiguration = new CorsConfiguration();</span>
-<span class="nc" id="L27">        corsConfiguration.setAllowCredentials(true);</span>
-<span class="nc" id="L28">        corsConfiguration.setAllowedOrigins(Arrays.asList(&quot;http://localhost:4200&quot;));</span>
-<span class="nc" id="L29">        corsConfiguration.setAllowedHeaders(Arrays.asList(&quot;Origin&quot;, &quot;Access-Control-Allow-Origin&quot;, &quot;Content-Type&quot;,</span>
+<span class="fc" id="L26">        CorsConfiguration corsConfiguration = new CorsConfiguration();</span>
+<span class="fc" id="L27">        corsConfiguration.setAllowCredentials(true);</span>
+<span class="fc" id="L28">        corsConfiguration.setAllowedOrigins(Arrays.asList(&quot;http://localhost:4200&quot;));</span>
+<span class="fc" id="L29">        corsConfiguration.setAllowedHeaders(Arrays.asList(&quot;Origin&quot;, &quot;Access-Control-Allow-Origin&quot;, &quot;Content-Type&quot;,</span>
                 &quot;Accept&quot;, &quot;Authorization&quot;, &quot;Origin, Accept&quot;, &quot;X-Requested-With&quot;,
                 &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;));
-<span class="nc" id="L32">        corsConfiguration.setExposedHeaders(Arrays.asList(&quot;Origin&quot;, &quot;Content-Type&quot;, &quot;Accept&quot;, &quot;Authorization&quot;,</span>
+<span class="fc" id="L32">        corsConfiguration.setExposedHeaders(Arrays.asList(&quot;Origin&quot;, &quot;Content-Type&quot;, &quot;Accept&quot;, &quot;Authorization&quot;,</span>
                 &quot;Access-Control-Allow-Origin&quot;, &quot;Access-Control-Allow-Origin&quot;, &quot;Access-Control-Allow-Credentials&quot;));
-<span class="nc" id="L34">        corsConfiguration.setAllowedMethods(Arrays.asList(&quot;GET&quot;, &quot;POST&quot;, &quot;PUT&quot;, &quot;DELETE&quot;, &quot;OPTIONS&quot;));</span>
-<span class="nc" id="L35">        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();</span>
-<span class="nc" id="L36">        urlBasedCorsConfigurationSource.registerCorsConfiguration(&quot;/**&quot;, corsConfiguration);</span>
-<span class="nc" id="L37">        return new CorsFilter(urlBasedCorsConfigurationSource);</span>
+<span class="fc" id="L34">        corsConfiguration.setAllowedMethods(Arrays.asList(&quot;GET&quot;, &quot;POST&quot;, &quot;PUT&quot;, &quot;DELETE&quot;, &quot;OPTIONS&quot;));</span>
+<span class="fc" id="L35">        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();</span>
+<span class="fc" id="L36">        urlBasedCorsConfigurationSource.registerCorsConfiguration(&quot;/**&quot;, corsConfiguration);</span>
+<span class="fc" id="L37">        return new CorsFilter(urlBasedCorsConfigurationSource);</span>
     }
 
 }
