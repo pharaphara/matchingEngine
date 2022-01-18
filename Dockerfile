@@ -1,5 +1,5 @@
-FROM openjdk:alpine-slim
-VOLUME [ "/tmp" ]
-ADD matchingEngine-matchingEngine.war app.war
+From tomcat:8.5-jdk11-corretto
+RUN rm -rf /usr/local/tomcat/webapps/*
+COPY matchingEngine-matchingEngine.war /usr/local/tomcat/webapps/
 EXPOSE 8080
-ENTRYPOINT [ "sh","-c","java -war /app.war" ]
+CMD ["catalina.sh","run"]
