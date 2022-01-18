@@ -40,7 +40,9 @@ springdoc:
 services:
   walletApi: localhost:9090/assets-api-rest/sendPayment
 
-    
+app:
+    username: test
+    password: test
 
 
 ---
