@@ -24,6 +24,7 @@ public class Currency {
 	private String name;
 	
 	private double supply;
+	@Transient
 	private double price;
 	
 	public Currency() {
