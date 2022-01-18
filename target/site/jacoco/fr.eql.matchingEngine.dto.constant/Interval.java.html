@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Interval.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">matchingEngine</a> &gt; <a href="index.source.html" class="el_package">fr.eql.matchingEngine.dto.constant</a> &gt; <span class="el_source">Interval.java</span></div><h1>Interval.java</h1><pre class="source lang-java linenums">package fr.eql.matchingEngine.dto.constant;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
+
+<span class="nc" id="L6">public enum Interval {</span>
+
+<span class="nc" id="L8">	Minute(&quot;1m&quot;,1),</span>
+<span class="nc" id="L9">	ThreeMinutes(&quot;3m&quot;,3),</span>
+<span class="nc" id="L10">	FiveMinutes (&quot;5m&quot;,5),</span>
+<span class="nc" id="L11">	FifteenMinutes(&quot;15m&quot;,15),</span>
+<span class="nc" id="L12">	ThirtyMinutes(&quot;30m&quot;,30),</span>
+<span class="nc" id="L13">	Hour        (&quot;1h&quot;,60),</span>
+<span class="nc" id="L14">	TwoHours    (&quot;2h&quot;,120),</span>
+<span class="nc" id="L15">	FourHours   (&quot;4h&quot;, 240),</span>
+<span class="nc" id="L16">	SixHours    (&quot;6h&quot;,360),</span>
+<span class="nc" id="L17">	EightHours  (&quot;8h&quot;,8*60),</span>
+<span class="nc" id="L18">	TwelveHours (&quot;12h&quot;,12*60),</span>
+<span class="nc" id="L19">	Day         (&quot;1d&quot;,24*60),</span>
+<span class="nc" id="L20">	ThreeDays   (&quot;3d&quot;,72*60),</span>
+<span class="nc" id="L21">	Week        (&quot;1w&quot;,7*24*60),</span>
+<span class="nc" id="L22">	Month       (&quot;1M&quot;,30*24*60);</span>
+
+	public final String label;
+	public final long numberOfMinute;
+
+<span class="nc" id="L27">	private Interval(String label, long numberOfMinute) {</span>
+<span class="nc" id="L28">		this.label = label;</span>
+<span class="nc" id="L29">		this.numberOfMinute = numberOfMinute;</span>
+<span class="nc" id="L30">	}</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

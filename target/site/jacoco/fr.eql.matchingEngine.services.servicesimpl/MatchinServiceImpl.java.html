@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MatchinServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">matchingEngine</a> &gt; <a href="index.source.html" class="el_package">fr.eql.matchingEngine.services.servicesimpl</a> &gt; <span class="el_source">MatchinServiceImpl.java</span></div><h1>MatchinServiceImpl.java</h1><pre class="source lang-java linenums">package fr.eql.matchingEngine.services.servicesimpl;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -9,24 +10,25 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import fr.eql.matchingEngine.dao.OrderRepository;
 import fr.eql.matchingEngine.dto.constant.OrderStatus;
 import fr.eql.matchingEngine.dto.constant.OrderType;
 import fr.eql.matchingEngine.dto.constant.TradingPair;
-import fr.eql.matchingEngine.dto.model.Ordre;
-import fr.eql.matchingEngine.endpointservices.servicesinterface.PaymentServices;
+import fr.eql.matchingEngine.dto.entity.Ordre;
+import fr.eql.matchingEngine.endpointservices.servicesinterface.WalletServices;
 import fr.eql.matchingEngine.services.servicesinterface.MatchingService;
 
 @Service
-<span class="nc" id="L23">public class MatchinServiceImpl implements MatchingService {</span>
+<span class="nc" id="L25">public class MatchinServiceImpl implements MatchingService {</span>
 
 	@Autowired
 	OrderRepository orderRepository;
 
 	@Autowired
-	PaymentServices paymentServices;
+	WalletServices walletServices;
 
 	private Map&lt;TradingPair, LinkedList&lt;Ordre&gt;&gt; bidBooks;
 	private Map&lt;TradingPair, LinkedList&lt;Ordre&gt;&gt; askBooks;
@@ -34,111 +36,106 @@ import fr.eql.matchingEngine.services.servicesinterface.MatchingService;
 	@PostConstruct
 	public void init() {
 
-<span class="nc" id="L37">		List&lt;Ordre&gt; allOpenBid = orderRepository.findByOrderTypeAndStatusInOrderByLimitPrice(OrderType.BID, Arrays.asList(OrderStatus.NEW,OrderStatus.PARTIALLY_FILLED));</span>
-<span class="nc" id="L38">		System.out.println(&quot;open bid size = &quot;+allOpenBid.size());</span>
-<span class="nc" id="L39">		List&lt;Ordre&gt; allOpenAsk = orderRepository.findByOrderTypeAndStatusInOrderByLimitPrice(OrderType.ASK, Arrays.asList(OrderStatus.NEW,OrderStatus.PARTIALLY_FILLED));</span>
-<span class="nc" id="L40">		System.out.println(&quot;open ask size = &quot;+allOpenAsk.size());</span>
+<span class="nc" id="L39">		List&lt;Ordre&gt; allOpenBid = orderRepository.findByOrderTypeAndStatusInOrderByLimitPriceAscAmountAsc(OrderType.BID, Arrays.asList(OrderStatus.NEW,OrderStatus.PARTIALLY_FILLED));</span>
+<span class="nc" id="L40">		System.out.println(&quot;open bid size = &quot;+allOpenBid.size());</span>
+<span class="nc" id="L41">		List&lt;Ordre&gt; allOpenAsk = orderRepository.findByOrderTypeAndStatusInOrderByLimitPriceAscAmountDesc(OrderType.ASK, Arrays.asList(OrderStatus.NEW,OrderStatus.PARTIALLY_FILLED));</span>
+<span class="nc" id="L42">		System.out.println(&quot;open ask size = &quot;+allOpenAsk.size());</span>
 
 		//initilizing each book
-<span class="nc" id="L43">		bidBooks = new HashMap&lt;TradingPair, LinkedList&lt;Ordre&gt;&gt;();</span>
-<span class="nc" id="L44">		askBooks = new HashMap&lt;TradingPair, LinkedList&lt;Ordre&gt;&gt;();</span>
+<span class="nc" id="L45">		bidBooks = new HashMap&lt;TradingPair, LinkedList&lt;Ordre&gt;&gt;();</span>
+<span class="nc" id="L46">		askBooks = new HashMap&lt;TradingPair, LinkedList&lt;Ordre&gt;&gt;();</span>
 
 		//Create an entry for each trading pair in each book order
-<span class="nc" id="L47">		Arrays.stream(TradingPair.values()).forEach(pair-&gt;{</span>
-<span class="nc" id="L48">			bidBooks.put(pair, new LinkedList&lt;Ordre&gt;());</span>
-<span class="nc" id="L49">			askBooks.put(pair, new LinkedList&lt;Ordre&gt;());</span>
+<span class="nc" id="L49">		Arrays.stream(TradingPair.values()).forEach(pair-&gt;{</span>
+<span class="nc" id="L50">			bidBooks.put(pair, new LinkedList&lt;Ordre&gt;());</span>
+<span class="nc" id="L51">			askBooks.put(pair, new LinkedList&lt;Ordre&gt;());</span>
 
-<span class="nc" id="L51">		});</span>
+<span class="nc" id="L53">		});</span>
 
 
 		//add all orders in the right linkedlist
-<span class="nc" id="L55">		allOpenBid.forEach(bidOrder-&gt;bidBooks.get(bidOrder.getCurrencyPair()).add(bidOrder));</span>
-<span class="nc" id="L56">		allOpenAsk.forEach(askOrder-&gt;askBooks.get(askOrder.getCurrencyPair()).add(askOrder));</span>
+<span class="nc" id="L57">		allOpenBid.forEach(bidOrder-&gt;bidBooks.get(bidOrder.getCurrencyPair()).add(bidOrder));</span>
+<span class="nc" id="L58">		allOpenAsk.forEach(askOrder-&gt;askBooks.get(askOrder.getCurrencyPair()).add(askOrder));</span>
 
 
-<span class="nc" id="L59">		bookToConsole();</span>
+<span class="nc" id="L61">		bookToConsole();</span>
 
-<span class="nc" id="L61">	}</span>
+<span class="nc" id="L63">	}</span>
 
 	private void bookToConsole() {
-<span class="nc" id="L64">		bidBooks.forEach((pair,book)-&gt;{</span>
-<span class="nc bnc" id="L65" title="All 2 branches missed.">			if(book.size()&gt;0) {</span>
-<span class="nc" id="L66">				System.out.println(&quot;Pair  :&quot;+pair);</span>
-<span class="nc" id="L67">				book.forEach(ordre-&gt;System.out.println(&quot;BUY&quot;+&quot; &quot;+ordre.getLimitPrice()+&quot; -&quot;+ordre.getId()));</span>
+<span class="nc" id="L66">		bidBooks.forEach((pair,book)-&gt;{</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">			if(book.size()&gt;0) {</span>
+<span class="nc" id="L68">				System.out.println(&quot;Pair  :&quot;+pair);</span>
+<span class="nc" id="L69">				book.forEach(ordre-&gt;System.out.println(&quot;BUY&quot;+&quot; &quot;+ordre.getLimitPrice()+&quot; -&quot;+(ordre.getAmount()-ordre.getFilledamount())));</span>
 			}
 
-<span class="nc" id="L70">		});</span>
-<span class="nc" id="L71">		System.out.println(&quot;------&quot;);</span>
-<span class="nc" id="L72">		askBooks.forEach((pair,book)-&gt;{</span>
-<span class="nc bnc" id="L73" title="All 2 branches missed.">			if(book.size()&gt;0) {</span>
+<span class="nc" id="L72">		});</span>
+<span class="nc" id="L73">		System.out.println(&quot;------&quot;);</span>
+<span class="nc" id="L74">		askBooks.forEach((pair,book)-&gt;{</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">			if(book.size()&gt;0) {</span>
 
-<span class="nc" id="L75">				book.forEach(ordre-&gt;System.out.println(&quot;SEL&quot;+&quot; &quot;+ordre.getLimitPrice()+&quot; -&quot;+ordre.getId()));</span>
+<span class="nc" id="L77">				book.forEach(ordre-&gt;System.out.println(&quot;SEL&quot;+&quot; &quot;+ordre.getLimitPrice()+&quot; -&quot;+(ordre.getAmount()-ordre.getFilledamount())));</span>
 			}
 
-<span class="nc" id="L78">		});</span>
-<span class="nc" id="L79">	}</span>
+<span class="nc" id="L80">		});</span>
+<span class="nc" id="L81">	}</span>
 	@Override
 	public void updateBook(Ordre newOrder) {
 
-<span class="nc" id="L83">		init();</span>
-<span class="nc" id="L84">		bookToConsole();</span>
-<span class="nc" id="L85">		matchOrders();</span>
+<span class="nc" id="L85">		init();</span>
+<span class="nc" id="L86">		bookToConsole();</span>
+<span class="nc" id="L87">		matchOrders();</span>
 
-<span class="nc" id="L87">	}</span>
+<span class="nc" id="L89">	}</span>
 
 	private void matchOrders() {
-<span class="nc" id="L90">		bidBooks.forEach((pair,book)-&gt;{</span>
+<span class="nc" id="L92">		bidBooks.forEach((pair,book)-&gt;{</span>
 
-<span class="nc bnc" id="L92" title="All 4 branches missed.">			if(book.size()&gt;0&amp;&amp;askBooks.get(pair).size()&gt;0) {</span>
-<span class="nc" id="L93">				Ordre lowestBID =book.getLast();</span>
-<span class="nc" id="L94">				Ordre lowestASK = askBooks.get(pair).getFirst();</span>
+<span class="nc bnc" id="L94" title="All 4 branches missed.">			if(book.size()&gt;0&amp;&amp;askBooks.get(pair).size()&gt;0) {</span>
+<span class="nc" id="L95">				Ordre lowestBID =book.getLast();</span>
+<span class="nc" id="L96">				Ordre lowestASK = askBooks.get(pair).getFirst();</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">				Ordre highestLeftAmmount = (lowestBID.getAmount()-lowestBID.getFilledamount()&gt;=lowestASK.getAmount()-lowestASK.getFilledamount()) ? lowestBID: lowestASK ;</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">				Ordre lowestLeftAmmount = (lowestBID.getAmount()-lowestBID.getFilledamount()&gt;=lowestASK.getAmount()-lowestASK.getFilledamount()) ? lowestASK: lowestBID ;</span>
 
 
-<span class="nc bnc" id="L97" title="All 2 branches missed.">				if(lowestBID.getLimitPrice()&gt;=lowestASK.getLimitPrice()) {</span>
-<span class="nc" id="L98">					fullfillOrders(lowestBID,lowestASK);</span>
-<span class="nc" id="L99">					matchOrders();//recursivelly match all possible orders</span>
+
+
+<span class="nc bnc" id="L103" title="All 2 branches missed.">				if(lowestBID.getLimitPrice()&gt;=lowestASK.getLimitPrice()) {</span>
+<span class="nc" id="L104">					fullfillOrders(highestLeftAmmount,lowestLeftAmmount);</span>
+<span class="nc" id="L105">					matchOrders();//recursivelly match all possible orders</span>
 				}
 			}
-<span class="nc" id="L102">		});</span>
-<span class="nc" id="L103">	}</span>
+<span class="nc" id="L108">		});</span>
+<span class="nc" id="L109">	}</span>
 
-	private void fullfillOrders(Ordre BID, Ordre ASK) {
-<span class="nc bnc" id="L106" title="All 2 branches missed.">		if (BID.getAmount()&gt;=ASK.getAmount()) {</span>
-<span class="nc" id="L107">			BID.setFilledamount(BID.getFilledamount()+ASK.getAmount());</span>
-<span class="nc" id="L108">			ASK.setFilledamount(ASK.getAmount());</span>
-<span class="nc" id="L109">			ASK.setStatus(OrderStatus.FILLED);</span>
-<span class="nc" id="L110">			paymentServices.sendPayment(ASK);</span>
-<span class="nc bnc" id="L111" title="All 2 branches missed.">			if (BID.getAmount()==BID.getFilledamount()) {</span>
-<span class="nc" id="L112">				BID.setStatus(OrderStatus.FILLED);</span>
-<span class="nc" id="L113">				paymentServices.sendPayment(BID);</span>
-			}else {
-<span class="nc" id="L115">				BID.setStatus(OrderStatus.PARTIALLY_FILLED);</span>
-				
-			}
+	private void fullfillOrders(Ordre HIGH, Ordre LOW) {
+		//oldest order set the trade price
+<span class="nc bnc" id="L113" title="All 2 branches missed.">		double tradePrice= (HIGH.getCreationDate().isBefore(LOW.getCreationDate()))? HIGH.getLimitPrice():LOW.getLimitPrice() ;</span>
 
+<span class="nc" id="L115">		HIGH.setAveragePrice(HIGH.getAveragePrice()+tradePrice/HIGH.getAmount()*LOW.leftamount());</span>
+<span class="nc" id="L116">		LOW.setAveragePrice(LOW.getAveragePrice()+tradePrice/LOW.getAmount()*LOW.leftamount());</span>
+<span class="nc" id="L117">		HIGH.setFilledamount(HIGH.getFilledamount()+LOW.leftamount());</span>
+<span class="nc" id="L118">		LOW.setFilledamount(LOW.getAmount());</span>
+<span class="nc" id="L119">		LOW.setStatus(OrderStatus.FILLED);</span>
+<span class="nc" id="L120">		LOW.setFilledDate(LocalDateTime.now());</span>
+<span class="nc" id="L121">		walletServices.sendPayment(LOW);</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">		if (HIGH.getAmount()==HIGH.getFilledamount()) {</span>
+<span class="nc" id="L123">			HIGH.setStatus(OrderStatus.FILLED);</span>
+<span class="nc" id="L124">			HIGH.setFilledDate(LocalDateTime.now());</span>
+<span class="nc" id="L125">			walletServices.sendPayment(HIGH);</span>
 		}else {
-<span class="nc" id="L120">			BID.setFilledamount(BID.getAmount());</span>
-<span class="nc" id="L121">			ASK.setFilledamount(ASK.getFilledamount()+BID.getAmount());</span>
-<span class="nc" id="L122">			BID.setStatus(OrderStatus.FILLED);</span>
-<span class="nc" id="L123">			paymentServices.sendPayment(BID);</span>
-<span class="nc bnc" id="L124" title="All 2 branches missed.">			if (ASK.getAmount()==ASK.getFilledamount()) {</span>
-<span class="nc" id="L125">				ASK.setStatus(OrderStatus.FILLED);</span>
-<span class="nc" id="L126">				paymentServices.sendPayment(ASK);</span>
-			}else {
-<span class="nc" id="L128">				ASK.setStatus(OrderStatus.PARTIALLY_FILLED);</span>
-				
-			}
+<span class="nc" id="L127">			HIGH.setStatus(OrderStatus.PARTIALLY_FILLED);</span>
 		}
 
-<span class="nc" id="L133">		orderRepository.saveAll(Arrays.asList(BID,ASK));</span>
-		
-		
-<span class="nc" id="L136">		init();</span>
+
+<span class="nc" id="L131">		orderRepository.saveAll(Arrays.asList(HIGH,LOW));</span>
+
+<span class="nc" id="L133">		init();</span>
 
 
 
-<span class="nc" id="L140">	}</span>
-
+<span class="nc" id="L137">	}</span>
+	
 
 
 }

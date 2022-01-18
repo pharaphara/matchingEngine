@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PriceServicesImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">matchingEngine</a> &gt; <a href="index.source.html" class="el_package">fr.eql.matchingEngine.services.servicesimpl</a> &gt; <span class="el_source">PriceServicesImpl.java</span></div><h1>PriceServicesImpl.java</h1><pre class="source lang-java linenums">package fr.eql.matchingEngine.services.servicesimpl;
+
+import java.lang.reflect.Array;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import fr.eql.matchingEngine.dao.OrderRepository;
+import fr.eql.matchingEngine.dto.constant.Interval;
+import fr.eql.matchingEngine.dto.constant.OrderStatus;
+import fr.eql.matchingEngine.dto.constant.TradingPair;
+import fr.eql.matchingEngine.dto.entity.Ordre;
+import fr.eql.matchingEngine.dto.model.PriceDto;
+import fr.eql.matchingEngine.dto.model.PricesRequest;
+import fr.eql.matchingEngine.services.servicesinterface.PriceServices;
+
+@Service
+<span class="nc" id="L30">public class PriceServicesImpl  implements PriceServices{</span>
+	
+	@Autowired
+	OrderRepository orderRepository;
+	
+	private Map&lt;TradingPair, PriceDto&gt; lastPrices;
+	
+	//when api start look for last prices in database
+	@PostConstruct
+	void onInit() {
+<span class="nc" id="L40">		lastPrices= new HashMap&lt;TradingPair, PriceDto&gt;();</span>
+<span class="nc" id="L41">		Arrays.stream(TradingPair.values()).forEach(pair-&gt;{</span>
+<span class="nc" id="L42">			PriceDto lastPrice = new PriceDto();</span>
+<span class="nc" id="L43">			Ordre ordre = orderRepository.findFirstByCurrencyPairAndStatusOrderByIdAsc(pair, OrderStatus.FILLED);</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">			if (ordre!=null) {</span>
+<span class="nc" id="L45">				BeanUtils.copyProperties(ordre, lastPrice);</span>
+				
+<span class="nc" id="L47">				lastPrices.put(pair, lastPrice);</span>
+			}
+			
+
+<span class="nc" id="L51">		});</span>
+<span class="nc" id="L52">	}</span>
+
+	@Override
+	public PriceDto getLastPrice(TradingPair pair) {
+<span class="nc" id="L56">		return lastPrices.get(pair);</span>
+	}
+
+	@Override
+	public void setLastPrice(PriceDto price) {
+<span class="nc" id="L61">		lastPrices.put(price.getCurrencyPair(), price);</span>
+		
+<span class="nc" id="L63">	}</span>
+
+	@Override
+	public List&lt;PriceDto&gt; getPricesBetween(TradingPair pair, LocalDateTime start, LocalDateTime end) {
+<span class="nc" id="L67">		List&lt;Ordre&gt; ordres = orderRepository.findByCurrencyPairAndFilledDateBetweenOrderByFilledDateAsc(pair, start, end);</span>
+<span class="nc" id="L68">		List&lt;PriceDto&gt; prices = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L69">		ordres.forEach(o-&gt;prices.add(new PriceDto(o)));</span>
+
+<span class="nc" id="L71">		return prices;</span>
+	}
+
+	@Override
+	public List&lt;PriceDto&gt; getPricesBetween(PricesRequest request) {
+<span class="nc" id="L76">		return getPricesBetween(request.getPair(), request.getStart(), request.getEnd());</span>
+	}
+
+	@Override
+	public List&lt;Double[]&gt; getLastCandles(TradingPair pair, Interval interval, int nb) {
+<span class="nc" id="L81">		List&lt;PriceDto&gt; prices=getPricesBetween(pair, LocalDateTime.now().minusHours(1), LocalDateTime.now());</span>
+		
+<span class="nc" id="L83">		return null;</span>
+	}
+
+	
+	
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

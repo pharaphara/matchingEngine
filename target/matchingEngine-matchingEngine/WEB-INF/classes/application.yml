@@ -1,6 +1,3 @@
-server:
-    port: 8095
-
 
 logging:
     file: /data/local/tomcat/logs/matchingEngine.log
@@ -10,9 +7,42 @@ logging:
     numberDebugChar: 10000
 
 project:
-    name: matchingEngine
+    name: match
     wiki: https://www.google.fr
     
+
+
+spring:
+  datasource:
+    username: root
+    url: jdbc:mysql://localhost:3306/matchingengine?createDatabaseIfNotExist=true&serverTimezone=UTC
+    password: root
+    initialization-mode: always
+  sql:
+    init:
+      mode: always
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL57Dialect
+    defer-datasource-initialization: 'true'
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: 'true'
+
+server:
+  port: '8483'
+  
+springdoc:
+  swagger-ui:
+    path: /doc-swagger.html
+    
+services:
+  walletApi: localhost:9090/assets-api-rest/sendPayment
+
+app:
+    username: test
+    password: test
 
 
 ---
