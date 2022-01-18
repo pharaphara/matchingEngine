@@ -51,9 +51,15 @@ public class OrderController {
 		return orderServices.newOrder(newOrder);
 	}
 
+	
 	@GetMapping("/myOrders")
 	public ResponseEntity<List<Ordre>> getOrdersByUser(@RequestParam String user){
 		return new ResponseEntity<List<Ordre>>(orderRepository.findByUser(user), HttpStatus.OK) ;
+	}
+	
+	@GetMapping("/myOrders")
+	public ResponseEntity<List<Ordre>> getOrders(@RequestParam TradingPair pair){
+		return new ResponseEntity<List<Ordre>>(orderRepository.findbyCurrencyPair(pair), HttpStatus.OK) ;
 	}
 
 	@GetMapping("/status")
