@@ -27,29 +27,34 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 	@Override
     protected void configure(HttpSecurity http) throws Exception {
 		//log.info(&quot;username {}, &quot;,username);
-        
-<span class="nc" id="L31">		http.sessionManagement().sessionCreationPolicy(</span>
-<span class="nc" id="L32">                SessionCreationPolicy.STATELESS)</span>
-<span class="nc" id="L33">		.and()</span>
-<span class="nc" id="L34">        .authorizeRequests()</span>
-<span class="nc" id="L35">        .antMatchers(&quot;/**&quot;).authenticated() // These urls are allowed by any authenticated user</span>
-<span class="nc" id="L36">        .and()</span>
-<span class="nc" id="L37">        .httpBasic();</span>
-<span class="nc" id="L38">        http.csrf().disable();</span>
-<span class="nc" id="L39">    }</span>
+<span class="nc" id="L30">		http</span>
+<span class="nc" id="L31">	    .authorizeRequests()</span>
+<span class="nc" id="L32">	    .antMatchers(&quot;/**&quot;).permitAll()</span>
+<span class="nc" id="L33">	    .anyRequest().authenticated();</span>
+<span class="nc" id="L34">		 http.csrf().disable();</span>
+//        
+//		http.sessionManagement().sessionCreationPolicy(
+//                SessionCreationPolicy.STATELESS)
+//		.and()
+//        .authorizeRequests()
+//        .antMatchers(&quot;/**&quot;).authenticated() // These urls are allowed by any authenticated user
+//        .and()
+//        .httpBasic();
+//        http.csrf().disable();
+<span class="nc" id="L44">    }</span>
 
 	@Bean
     public UserDetailsService userDetailsService() {
 		//log.info(&quot;username {}, &quot;,username);
-<span class="nc" id="L44">        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();</span>
-<span class="nc" id="L45">        String encodedPassword = passwordEncoder().encode(password);</span>
-<span class="nc" id="L46">        manager.createUser(User.withUsername(username).password(encodedPassword).roles(&quot;USER&quot;).build());</span>
-<span class="nc" id="L47">        return manager;</span>
+<span class="nc" id="L49">        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();</span>
+<span class="nc" id="L50">        String encodedPassword = passwordEncoder().encode(password);</span>
+<span class="nc" id="L51">        manager.createUser(User.withUsername(username).password(encodedPassword).roles(&quot;USER&quot;).build());</span>
+<span class="nc" id="L52">        return manager;</span>
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-<span class="nc" id="L52">        return new BCryptPasswordEncoder();</span>
+<span class="nc" id="L57">        return new BCryptPasswordEncoder();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PriceDto.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">matchingEngine</a> &gt; <a href="index.source.html" class="el_package">fr.eql.matchingEngine.dto.model</a> &gt; <span class="el_source">PriceDto.java</span></div><h1>PriceDto.java</h1><pre class="source lang-java linenums">package fr.eql.matchingEngine.dto.model;
+
+import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDateTime;
+
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+import fr.eql.matchingEngine.dto.constant.TradingPair;
+import fr.eql.matchingEngine.dto.entity.Ordre;
+
+
+public class PriceDto {
+	
+	private double price;
+	
+	@Enumerated(EnumType.STRING)
+	private TradingPair currencyPair;
+	private LocalDateTime filledDate;
+	
+	
+	public PriceDto() {
+<span class="nc" id="L27">		super();</span>
+<span class="nc" id="L28">	}</span>
+
+
+	public PriceDto(double price, TradingPair currencyPair, LocalDateTime filledDate) {
+<span class="nc" id="L32">		super();</span>
+<span class="nc" id="L33">		this.price = price;</span>
+<span class="nc" id="L34">		this.currencyPair = currencyPair;</span>
+<span class="nc" id="L35">		this.filledDate = filledDate;</span>
+<span class="nc" id="L36">	}</span>
+
+
+<span class="nc" id="L39">	public PriceDto(Ordre ordre) {</span>
+<span class="nc" id="L40">		price = ordre.getAveragePrice();</span>
+<span class="nc" id="L41">		currencyPair=ordre.getCurrencyPair();</span>
+<span class="nc" id="L42">		filledDate= ordre.getFilledDate();</span>
+<span class="nc" id="L43">	}</span>
+
+
+	public double getPrice() {
+<span class="nc" id="L47">		return price;</span>
+	}
+
+
+	public void setPrice(double price) {
+<span class="nc" id="L52">		this.price = price;</span>
+<span class="nc" id="L53">	}</span>
+
+
+	public TradingPair getCurrencyPair() {
+<span class="nc" id="L57">		return currencyPair;</span>
+	}
+
+
+	public void setCurrencyPair(TradingPair currencyPair) {
+<span class="nc" id="L62">		this.currencyPair = currencyPair;</span>
+<span class="nc" id="L63">	}</span>
+
+
+	public LocalDateTime getFilledDate() {
+<span class="nc" id="L67">		return filledDate;</span>
+	}
+
+
+	public void setFilledDate(LocalDateTime filledDate) {
+<span class="nc" id="L72">		this.filledDate = filledDate;</span>
+<span class="nc" id="L73">	}</span>
+
+
+	public int compareTo(ChronoLocalDateTime&lt;?&gt; other) {
+<span class="nc" id="L77">		return filledDate.compareTo(other);</span>
+	}
+
+
+	@Override
+	public String toString() {
+<span class="nc" id="L83">		return &quot;PriceDto [price=&quot; + price + &quot;, currencyPair=&quot; + currencyPair + &quot;, filledDate=&quot; + filledDate + &quot;]&quot;;</span>
+	}
+	
+	
+	
+	
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>

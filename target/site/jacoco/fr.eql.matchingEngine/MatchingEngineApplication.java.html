@@ -1,16 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MatchingEngineApplication.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">matchingEngine</a> &gt; <a href="index.source.html" class="el_package">fr.eql.matchingEngine</a> &gt; <span class="el_source">MatchingEngineApplication.java</span></div><h1>MatchingEngineApplication.java</h1><pre class="source lang-java linenums">package fr.eql.matchingEngine;
 
+import java.util.Arrays;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
 
 //@PropertySource(value = &quot;file:c:/afcepf/matchingEngine/src/main/resources/application.yml&quot;)
 @SpringBootApplication
-<span class="nc" id="L9">public class MatchingEngineApplication {</span>
+<span class="nc" id="L17">public class MatchingEngineApplication {</span>
 
 	public static void main(String[] args) {
-<span class="nc" id="L12">		SpringApplication.run(MatchingEngineApplication.class, args);</span>
-<span class="nc" id="L13">	}</span>
+<span class="nc" id="L20">		SpringApplication.run(MatchingEngineApplication.class, args);</span>
+<span class="nc" id="L21">		System.out.println(&quot;ready&quot;);</span>
+<span class="nc" id="L22">	}</span>
+	
+	@Bean
+    public CorsFilter corsFilter() {
+<span class="nc" id="L26">        CorsConfiguration corsConfiguration = new CorsConfiguration();</span>
+<span class="nc" id="L27">        corsConfiguration.setAllowCredentials(true);</span>
+<span class="nc" id="L28">        corsConfiguration.setAllowedOrigins(Arrays.asList(&quot;http://localhost:4200&quot;));</span>
+<span class="nc" id="L29">        corsConfiguration.setAllowedHeaders(Arrays.asList(&quot;Origin&quot;, &quot;Access-Control-Allow-Origin&quot;, &quot;Content-Type&quot;,</span>
+                &quot;Accept&quot;, &quot;Authorization&quot;, &quot;Origin, Accept&quot;, &quot;X-Requested-With&quot;,
+                &quot;Access-Control-Request-Method&quot;, &quot;Access-Control-Request-Headers&quot;));
+<span class="nc" id="L32">        corsConfiguration.setExposedHeaders(Arrays.asList(&quot;Origin&quot;, &quot;Content-Type&quot;, &quot;Accept&quot;, &quot;Authorization&quot;,</span>
+                &quot;Access-Control-Allow-Origin&quot;, &quot;Access-Control-Allow-Origin&quot;, &quot;Access-Control-Allow-Credentials&quot;));
+<span class="nc" id="L34">        corsConfiguration.setAllowedMethods(Arrays.asList(&quot;GET&quot;, &quot;POST&quot;, &quot;PUT&quot;, &quot;DELETE&quot;, &quot;OPTIONS&quot;));</span>
+<span class="nc" id="L35">        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();</span>
+<span class="nc" id="L36">        urlBasedCorsConfigurationSource.registerCorsConfiguration(&quot;/**&quot;, corsConfiguration);</span>
+<span class="nc" id="L37">        return new CorsFilter(urlBasedCorsConfigurationSource);</span>
+    }
 
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.2.201808211720</span></div></body></html>
