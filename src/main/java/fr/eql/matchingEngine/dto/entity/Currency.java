@@ -24,14 +24,13 @@ public class Currency {
 	private String name;
 	
 	private double supply;
-	@Transient
-	private PriceDto price;
+	private double price;
 	
 	public Currency() {
 		super();
 	}
 
-	public Currency(String ticker, String name, double supply, PriceDto price) {
+	public Currency(String ticker, String name, double supply, double price) {
 		super();
 		this.ticker = ticker;
 		this.name = name;
@@ -63,11 +62,11 @@ public class Currency {
 		this.supply = supply;
 	}
 
-	public PriceDto getPrice() {
+	public double getPrice() {
 		return price;
 	}
 
-	public void setPrice(PriceDto price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}
 
@@ -75,12 +74,7 @@ public class Currency {
 	public String toString() {
 		return "Currency [ticker=" + ticker + ", name=" + name + ", supply=" + supply + ", price=" + price + "]";
 	}
+	
+}
 
 	
-
-
-
-
-
-	  
-}
