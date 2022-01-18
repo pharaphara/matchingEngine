@@ -14,8 +14,8 @@ project:
 
 
 
-server:
-  port: '8483'
+#server:
+#  port: '8483'
   
 springdoc:
   swagger-ui:
