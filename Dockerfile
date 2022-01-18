@@ -1,5 +1,5 @@
 FROM openjdk:11
 VOLUME [ "/tmp" ]
-ADD demo-0.0.1-SNAPSHOT.jar app.jar
+ADD matchengine.war app.war
 EXPOSE 8080
-ENTRYPOINT [ "sh","-c","java -jar /app.jar" ]
+ENTRYPOINT [ "sh","-c","java -war /app.war" ]
