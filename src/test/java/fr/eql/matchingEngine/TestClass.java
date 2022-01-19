@@ -1,4 +1,4 @@
-package com.matchEngine;
+package fr.eql.matchingEngine;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -24,7 +24,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 @ActiveProfiles("test")
 
  */
-@ContextConfiguration(classes = MatchingEngineApplication.class)
+//@ContextConfiguration(classes = MatchingEngineApplication.class)
 @SpringBootTest
 class MatchingServiceTest {
 	

@@ -29,7 +29,7 @@ import fr.eql.matchingEngine.services.servicesinterface.PriceServices;
 
 @RestController
 @RequestMapping(&quot;/bookOrder&quot;)
-<span class="fc" id="L32">public class OrderController {</span>
+<span class="nc" id="L32">public class OrderController {</span>
 
 	@Autowired
 	OrderServices orderServices;
@@ -51,14 +51,25 @@ import fr.eql.matchingEngine.services.servicesinterface.PriceServices;
 <span class="nc" id="L51">		return orderServices.newOrder(newOrder);</span>
 	}
 
+	
 	@GetMapping(&quot;/myOrders&quot;)
 	public ResponseEntity&lt;List&lt;Ordre&gt;&gt; getOrdersByUser(@RequestParam String user){
-<span class="nc" id="L56">		return new ResponseEntity&lt;List&lt;Ordre&gt;&gt;(orderRepository.findByUser(user), HttpStatus.OK) ;</span>
+<span class="nc" id="L57">		return new ResponseEntity&lt;List&lt;Ordre&gt;&gt;(orderRepository.findByUser(user), HttpStatus.OK) ;</span>
+	}
+	
+	@GetMapping(&quot;/Orders&quot;)
+	public ResponseEntity&lt;List&lt;Ordre&gt;&gt; getOrders(@RequestParam TradingPair pair){
+<span class="nc" id="L62">		return new ResponseEntity&lt;List&lt;Ordre&gt;&gt;(orderRepository.findByCurrencyPair(pair), HttpStatus.OK) ;</span>
+	}
+	
+	@GetMapping(&quot;/lastOrder&quot;)
+	public ResponseEntity&lt;Ordre&gt; getLastOrder(@RequestParam String user){
+<span class="nc" id="L67">		return new ResponseEntity&lt;Ordre&gt;(orderRepository.findFirstByUserOrderByIdAsc(user), HttpStatus.OK) ;</span>
 	}
 
 	@GetMapping(&quot;/status&quot;)
 	public ResponseEntity&lt;List&lt;Ordre&gt;&gt; getByStatus(@RequestParam OrderStatus status){
-<span class="nc" id="L61">		return new ResponseEntity&lt;List&lt;Ordre&gt;&gt;(orderRepository.findByStatus(status), HttpStatus.OK) ;</span>
+<span class="nc" id="L72">		return new ResponseEntity&lt;List&lt;Ordre&gt;&gt;(orderRepository.findByStatus(status), HttpStatus.OK) ;</span>
 	}
 
 
