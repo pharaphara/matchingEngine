@@ -1,5 +1,5 @@
-FROM openjdk:11
-VOLUME [ "/tmp" ]
-ADD demo-0.0.1-SNAPSHOT.jar app.jar
+From tomcat:8.5-jdk11-corretto
+RUN rm -rf /usr/local/tomcat/webapps/*
+COPY matchingEngine-matchingEngine.war /usr/local/tomcat/webapps/
 EXPOSE 8080
-ENTRYPOINT [ "sh","-c","java -jar /app.jar" ]
+CMD ["catalina.sh","run"]
