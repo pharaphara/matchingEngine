@@ -38,7 +38,7 @@ import static org.apache.logging.log4j.util.Strings.isNotBlank;
 @Aspect
 @Component
 @ConfigurationProperties(&quot;interceptor&quot;)
-<span class="fc" id="L41">public class LoggingAspect {</span>
+<span class="nc" id="L41">public class LoggingAspect {</span>
 
     @Value(&quot;${project.name}&quot;)
     String projectName;
@@ -125,7 +125,7 @@ import static org.apache.logging.log4j.util.Strings.isNotBlank;
 <span class="nc" id="L125">                paramsOutput = String.valueOf(requestToJson((HttpServletRequest)result));</span>
             }
 
-        } finally {
+<span class="nc" id="L128">        } finally {</span>
 <span class="nc" id="L129">            MDC.put(&quot;actualMethodName&quot;, joinPoint.getSignature().getName() + &quot; -&gt; Aspect methode : &quot; ) ;</span>
 <span class="nc" id="L130">            duration = currentTimeMillis() - start;</span>
 
@@ -184,7 +184,7 @@ import static org.apache.logging.log4j.util.Strings.isNotBlank;
 <span class="nc" id="L184">                paramsOutput = String.valueOf(requestToJson((HttpServletRequest)result));</span>
             }
 
-        } finally {
+<span class="nc" id="L187">        } finally {</span>
 <span class="nc" id="L188">            MDC.put(&quot;actualMethodName&quot;, joinPoint.getSignature().getName() + &quot; -&gt; Aspect methode : &quot; ) ;</span>
 <span class="nc" id="L189">            duration = currentTimeMillis() - start;</span>
 <span class="nc bnc" id="L190" title="All 4 branches missed.">            LOGGER.debug(prefixLog + &quot; SERVICE RETURN - &quot; + (isNotBlank(paramsOutput) ? paramsOutput.substring(0, (paramsOutput.length() &gt; numberDebugChar ? numberDebugChar : paramsOutput.length())) : &quot;&quot;));</span>
@@ -240,7 +240,7 @@ import static org.apache.logging.log4j.util.Strings.isNotBlank;
 <span class="nc" id="L240">                paramsOutput = String.valueOf(requestToJson((HttpServletRequest)result));</span>
             }
 
-        } finally {
+<span class="nc" id="L243">        } finally {</span>
 <span class="nc" id="L244">            MDC.put(&quot;actualMethodName&quot;, joinPoint.getSignature().getName() + &quot; -&gt; Aspect methode : &quot; ) ;</span>
 <span class="nc" id="L245">            duration = currentTimeMillis() - start;</span>
 <span class="nc bnc" id="L246" title="All 4 branches missed.">            LOGGER.debug(prefixLog + &quot; CALL RETURN - &quot; + (isNotBlank(paramsOutput) ? paramsOutput.substring(0, (paramsOutput.length() &gt; numberDebugChar ? numberDebugChar : paramsOutput.length())) : &quot;&quot;));</span>

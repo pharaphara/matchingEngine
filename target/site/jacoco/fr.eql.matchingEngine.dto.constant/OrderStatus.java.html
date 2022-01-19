@@ -1,52 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="fr"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>OrderStatus.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">matchingEngine</a> &gt; <a href="index.source.html" class="el_package">fr.eql.matchingEngine.dto.constant</a> &gt; <span class="el_source">OrderStatus.java</span></div><h1>OrderStatus.java</h1><pre class="source lang-java linenums">package fr.eql.matchingEngine.dto.constant;
 
-<span class="fc" id="L3">public enum OrderStatus {</span>
+<span class="nc" id="L3">public enum OrderStatus {</span>
 
 
-	/**
+<span class="nc" id="L6">	/**</span>
 	 * Initial order when instantiated
 	 */
-<span class="fc" id="L9">	PENDING_NEW,</span>
-	/**
+<span class="nc" id="L9">	PENDING_NEW,</span>
+<span class="nc" id="L10">	/**</span>
 	 * Initial order when placed on the order book at exchange
 	 */
-<span class="fc" id="L13">	NEW,</span>
-	/**
+<span class="nc" id="L13">	NEW,</span>
+<span class="nc" id="L14">	/**</span>
 	 * Partially match against opposite order on order book at exchange
 	 */
-<span class="fc" id="L17">	PARTIALLY_FILLED,</span>
-	/**
+<span class="nc" id="L17">	PARTIALLY_FILLED,</span>
+<span class="nc" id="L18">	/**</span>
 	 * Fully match against opposite order on order book at exchange
 	 */
-<span class="fc" id="L21">	FILLED,</span>
-	/**
+<span class="nc" id="L21">	FILLED,</span>
+<span class="nc" id="L22">	/**</span>
 	 * Waiting to be removed from order book at exchange
 	 */
-<span class="fc" id="L25">	PENDING_CANCEL,</span>
-	/**
+<span class="nc" id="L25">	PENDING_CANCEL,</span>
+<span class="nc" id="L26">	/**</span>
 	 * Removed from order book at exchange
 	 */
-<span class="fc" id="L29">	CANCELED,</span>
-	/**
+<span class="nc" id="L29">	CANCELED,</span>
+<span class="nc" id="L30">	/**</span>
 	 * Waiting to be replaced by another order on order book at exchange
 	 */
-<span class="fc" id="L33">	PENDING_REPLACE,</span>
-	/**
+<span class="nc" id="L33">	PENDING_REPLACE,</span>
+<span class="nc" id="L34">	/**</span>
 	 * Order has been replace by another order on order book at exchange
 	 */
-<span class="fc" id="L37">	REPLACED,</span>
-	/**
+<span class="nc" id="L37">	REPLACED,</span>
+<span class="nc" id="L38">	/**</span>
 	 * Order has been triggered at stop price
 	 */
-<span class="fc" id="L41">	STOPPED,</span>
-	/**
+<span class="nc" id="L41">	STOPPED,</span>
+<span class="nc" id="L42">	/**</span>
 	 * Order has been rejected by exchange and not place on order book
 	 */
-<span class="fc" id="L45">	REJECTED,</span>
-	/**
+<span class="nc" id="L45">	REJECTED,</span>
+<span class="nc" id="L46">	/**</span>
 	 * Order has expired it's time to live or trading session and been removed from order book
 	 */
-<span class="fc" id="L49">	EXPIRED</span>
+<span class="nc" id="L49">	EXPIRED</span>
 
 
 }

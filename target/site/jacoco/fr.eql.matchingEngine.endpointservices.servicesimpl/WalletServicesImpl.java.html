@@ -21,9 +21,9 @@ import fr.eql.matchingEngine.endpointservices.servicesinterface.WalletServices;
 import fr.eql.matchingEngine.services.servicesinterface.PriceServices;
 
 @Service
-<span class="fc" id="L24">public class WalletServicesImpl implements WalletServices {</span>
+<span class="nc" id="L24">public class WalletServicesImpl implements WalletServices {</span>
 
-<span class="fc" id="L26">	Logger log = LoggerFactory.getLogger(WalletServicesImpl.class);</span>
+<span class="nc" id="L26">	Logger log = LoggerFactory.getLogger(WalletServicesImpl.class);</span>
 
 	@Autowired
 	private WebClient.Builder webClientBuilder;
@@ -59,7 +59,7 @@ import fr.eql.matchingEngine.services.servicesinterface.PriceServices;
 
 <span class="nc bnc" id="L60" title="All 2 branches missed.">		if (ordre.getOrderType().equals(OrderType.ASK)) {</span>
 <span class="nc" id="L61">			basePayement.setMontant(basePayement.getMontant()*-1);</span>
-		}else {
+<span class="nc" id="L62">		}else {</span>
 <span class="nc" id="L63">			counterPayement.setMontant(counterPayement.getMontant()*-1);</span>
 		}
 
@@ -69,12 +69,12 @@ import fr.eql.matchingEngine.services.servicesinterface.PriceServices;
 
 <span class="nc bnc" id="L70" title="All 2 branches missed.">		if (postPayload(basePayement).getStatusCode().is2xxSuccessful()) {</span>
 <span class="nc" id="L71">			basePayement.setSent(true);</span>
-		}else {
+<span class="nc" id="L72">		}else {</span>
 <span class="nc" id="L73">			basePayement.setSent(false);</span>
 		}
 <span class="nc bnc" id="L75" title="All 2 branches missed.">		if (postPayload(counterPayement).getStatusCode().is2xxSuccessful()) {</span>
 <span class="nc" id="L76">			counterPayement.setSent(true);</span>
-		}else {
+<span class="nc" id="L77">		}else {</span>
 <span class="nc" id="L78">			counterPayement.setSent(false);</span>
 		}
 		
